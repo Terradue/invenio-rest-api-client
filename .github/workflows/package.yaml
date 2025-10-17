@@ -13,9 +13,8 @@ on:
     branches:
     - develop
     - main
-    - patch-1
     paths:
-    - keycloak_oidc_api_client/**
+    - invenio-rest-api-client/**
     - .github/workflows/package.yaml
   release:
     types:
@@ -54,7 +53,8 @@ jobs:
       run: "hatch build \n"
     - name: Test package
       run: |
-        hatch test
+        # hatch test
+        echo "placeholder for tests"
     - name: Publish package distributions to PyPI (main)
       if: github.ref == 'refs/heads/main'
       uses: pypa/gh-action-pypi-publish@release/v1

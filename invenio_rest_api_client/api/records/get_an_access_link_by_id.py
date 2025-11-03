@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_an_access_link_by_id_response_200 import GetAnAccessLinkByIdResponse200
+from ...models.get_an_access_link_by_id_response_200 import (
+    GetAnAccessLinkByIdResponse200,
+)
 from ...types import Response
 
 
@@ -15,7 +17,10 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/records/{record_id}/access/links/{link_id}",
+        "url": "/api/records/{record_id}/access/links/{link_id}".format(
+            record_id=record_id,
+            link_id=link_id,
+        ),
     }
 
     return _kwargs

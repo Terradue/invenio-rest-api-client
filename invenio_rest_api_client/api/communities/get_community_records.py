@@ -22,7 +22,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/communities/{community_id}/records",
+        "url": "/api/communities/{community_id}/records".format(
+            community_id=community_id,
+        ),
         "params": params,
     }
 

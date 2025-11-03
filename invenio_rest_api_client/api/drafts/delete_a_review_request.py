@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.delete_a_review_request_response_200 import DeleteAReviewRequestResponse200
+from ...models.delete_a_review_request_response_200 import (
+    DeleteAReviewRequestResponse200,
+)
 from ...types import Response
 
 
@@ -14,7 +16,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": f"/api/records/{draft_id}/draft/review",
+        "url": "/api/records/{draft_id}/draft/review".format(
+            draft_id=draft_id,
+        ),
     }
 
     return _kwargs

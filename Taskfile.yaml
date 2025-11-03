@@ -21,4 +21,9 @@ tasks:
     cmds:
     - redocly bundle ./docs/openapi/invenio.yaml --output=./docs/openapi/invenio_bundled.yaml
     - redocly build-docs ./docs/openapi/invenio_bundled.yaml --output=./docs/openapi/invenio.html
-    - openapi-python-client generate  --meta none --path ./docs/openapi/invenio_bundled.yaml --output-path ./invenio_rest_api_client --overwrite
+    - |
+      openapi-python-client generate \
+      --meta none \
+      --path ./docs/openapi/invenio_bundled.yaml \
+      --output-path ./invenio_rest_api_client \
+      --overwrite

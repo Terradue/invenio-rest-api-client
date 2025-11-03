@@ -1,5 +1,10 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    TypeVar,
+    Union,
+)
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -129,7 +134,9 @@ class Feature:
             try:
                 if not isinstance(data, dict):
                     raise TypeError()
-                componentsschemas_geometry_geo_json_line_string = GeoJSONLineString.from_dict(data)
+                componentsschemas_geometry_geo_json_line_string = (
+                    GeoJSONLineString.from_dict(data)
+                )
 
                 return componentsschemas_geometry_geo_json_line_string
             except:  # noqa: E722
@@ -137,7 +144,9 @@ class Feature:
             try:
                 if not isinstance(data, dict):
                     raise TypeError()
-                componentsschemas_geometry_geo_json_polygon = GeoJSONPolygon.from_dict(data)
+                componentsschemas_geometry_geo_json_polygon = GeoJSONPolygon.from_dict(
+                    data
+                )
 
                 return componentsschemas_geometry_geo_json_polygon
             except:  # noqa: E722
@@ -145,7 +154,9 @@ class Feature:
             try:
                 if not isinstance(data, dict):
                     raise TypeError()
-                componentsschemas_geometry_geo_json_multi_point = GeoJSONMultiPoint.from_dict(data)
+                componentsschemas_geometry_geo_json_multi_point = (
+                    GeoJSONMultiPoint.from_dict(data)
+                )
 
                 return componentsschemas_geometry_geo_json_multi_point
             except:  # noqa: E722
@@ -153,14 +164,18 @@ class Feature:
             try:
                 if not isinstance(data, dict):
                     raise TypeError()
-                componentsschemas_geometry_geo_json_multi_line_string = GeoJSONMultiLineString.from_dict(data)
+                componentsschemas_geometry_geo_json_multi_line_string = (
+                    GeoJSONMultiLineString.from_dict(data)
+                )
 
                 return componentsschemas_geometry_geo_json_multi_line_string
             except:  # noqa: E722
                 pass
             if not isinstance(data, dict):
                 raise TypeError()
-            componentsschemas_geometry_geo_json_multi_polygon = GeoJSONMultiPolygon.from_dict(data)
+            componentsschemas_geometry_geo_json_multi_polygon = (
+                GeoJSONMultiPolygon.from_dict(data)
+            )
 
             return componentsschemas_geometry_geo_json_multi_polygon
 

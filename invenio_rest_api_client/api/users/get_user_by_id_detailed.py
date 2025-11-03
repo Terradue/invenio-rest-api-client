@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_user_by_id_detailed_response_200 import GetUserByIdDetailedResponse200
+from ...models.get_user_by_id_detailed_response_200 import (
+    GetUserByIdDetailedResponse200,
+)
 from ...types import Response
 
 
@@ -14,7 +16,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/users/{user_id}",
+        "url": "/api/users/{user_id}".format(
+            user_id=user_id,
+        ),
     }
 
     return _kwargs

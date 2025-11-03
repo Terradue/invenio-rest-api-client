@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.create_a_featured_community_entry_body import CreateAFeaturedCommunityEntryBody
+from ...models.create_a_featured_community_entry_body import (
+    CreateAFeaturedCommunityEntryBody,
+)
 from ...models.created import Created
 from ...types import Response
 
@@ -19,7 +21,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": f"/api/communities/{community_id}/featured",
+        "url": "/api/communities/{community_id}/featured".format(
+            community_id=community_id,
+        ),
     }
 
     _kwargs["json"] = body.to_dict()

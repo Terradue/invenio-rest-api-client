@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.specific_vocabularies_funders_by_id_response_200 import SpecificVocabulariesFundersByIdResponse200
+from ...models.specific_vocabularies_funders_by_id_response_200 import (
+    SpecificVocabulariesFundersByIdResponse200,
+)
 from ...types import Response
 
 
@@ -14,7 +16,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/funders/{voc_funders_id}",
+        "url": "/api/funders/{voc_funders_id}".format(
+            voc_funders_id=voc_funders_id,
+        ),
     }
 
     return _kwargs
@@ -24,7 +28,9 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, SpecificVocabulariesFundersByIdResponse200]]:
     if response.status_code == 200:
-        response_200 = SpecificVocabulariesFundersByIdResponse200.from_dict(response.json())
+        response_200 = SpecificVocabulariesFundersByIdResponse200.from_dict(
+            response.json()
+        )
 
         return response_200
 

@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.delete_a_featured_community_entry_response_200 import DeleteAFeaturedCommunityEntryResponse200
+from ...models.delete_a_featured_community_entry_response_200 import (
+    DeleteAFeaturedCommunityEntryResponse200,
+)
 from ...types import Response
 
 
@@ -15,7 +17,10 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": f"/api/communities/{community_id}/featured/{featured_entry_id}",
+        "url": "/api/communities/{community_id}/featured/{featured_entry_id}".format(
+            community_id=community_id,
+            featured_entry_id=featured_entry_id,
+        ),
     }
 
     return _kwargs
@@ -25,7 +30,9 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, DeleteAFeaturedCommunityEntryResponse200]]:
     if response.status_code == 200:
-        response_200 = DeleteAFeaturedCommunityEntryResponse200.from_dict(response.json())
+        response_200 = DeleteAFeaturedCommunityEntryResponse200.from_dict(
+            response.json()
+        )
 
         return response_200
 

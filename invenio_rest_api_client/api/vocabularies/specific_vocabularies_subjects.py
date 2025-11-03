@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.specific_vocabularies_subjects_response_200 import SpecificVocabulariesSubjectsResponse200
+from ...models.specific_vocabularies_subjects_response_200 import (
+    SpecificVocabulariesSubjectsResponse200,
+)
 from ...types import UNSET, Response
 
 
@@ -32,7 +34,9 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, SpecificVocabulariesSubjectsResponse200]]:
     if response.status_code == 200:
-        response_200 = SpecificVocabulariesSubjectsResponse200.from_dict(response.json())
+        response_200 = SpecificVocabulariesSubjectsResponse200.from_dict(
+            response.json()
+        )
 
         return response_200
 

@@ -20,7 +20,10 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": f"/api/requests/{request_id}/comments/{comment_id}",
+        "url": "/api/requests/{request_id}/comments/{comment_id}".format(
+            request_id=request_id,
+            comment_id=comment_id,
+        ),
     }
 
     _kwargs["json"] = body.to_dict()

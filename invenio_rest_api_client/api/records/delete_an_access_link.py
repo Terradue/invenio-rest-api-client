@@ -15,7 +15,10 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": f"/api/records/{record_id}/access/links/{link_id}",
+        "url": "/api/records/{record_id}/access/links/{link_id}".format(
+            record_id=record_id,
+            link_id=link_id,
+        ),
     }
 
     return _kwargs

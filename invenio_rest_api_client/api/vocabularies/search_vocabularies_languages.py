@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.search_vocabularies_languages_response_200 import SearchVocabulariesLanguagesResponse200
+from ...models.search_vocabularies_languages_response_200 import (
+    SearchVocabulariesLanguagesResponse200,
+)
 from ...types import Response
 
 

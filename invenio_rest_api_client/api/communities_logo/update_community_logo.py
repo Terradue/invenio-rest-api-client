@@ -18,7 +18,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": f"/api/communities/{community_id}/logo",
+        "url": "/api/communities/{community_id}/logo".format(
+            community_id=community_id,
+        ),
     }
 
     _kwargs["content"] = body.payload

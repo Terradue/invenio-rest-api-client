@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.vocabularies_contributorsroles_response_200 import VocabulariesContributorsrolesResponse200
+from ...models.vocabularies_contributorsroles_response_200 import (
+    VocabulariesContributorsrolesResponse200,
+)
 from ...types import Response
 
 
@@ -22,7 +24,9 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, VocabulariesContributorsrolesResponse200]]:
     if response.status_code == 200:
-        response_200 = VocabulariesContributorsrolesResponse200.from_dict(response.json())
+        response_200 = VocabulariesContributorsrolesResponse200.from_dict(
+            response.json()
+        )
 
         return response_200
 

@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.specific_vocabularies_funders_response_200 import SpecificVocabulariesFundersResponse200
+from ...models.specific_vocabularies_funders_response_200 import (
+    SpecificVocabulariesFundersResponse200,
+)
 from ...types import UNSET, Response, Unset
 
 

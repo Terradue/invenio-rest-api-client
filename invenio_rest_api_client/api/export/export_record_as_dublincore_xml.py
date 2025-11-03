@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.export_record_as_dublincore_xml_response_200 import ExportRecordAsDublincoreXmlResponse200
+from ...models.export_record_as_dublincore_xml_response_200 import (
+    ExportRecordAsDublincoreXmlResponse200,
+)
 from ...types import Response
 
 
@@ -14,7 +16,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/records/{record_id}/export/dublincore",
+        "url": "/api/records/{record_id}/export/dublincore".format(
+            record_id=record_id,
+        ),
     }
 
     return _kwargs

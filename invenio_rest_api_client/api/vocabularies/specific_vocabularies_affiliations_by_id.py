@@ -16,7 +16,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/affiliations/{voc_affiliation_id}",
+        "url": "/api/affiliations/{voc_affiliation_id}".format(
+            voc_affiliation_id=voc_affiliation_id,
+        ),
     }
 
     return _kwargs
@@ -26,7 +28,9 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, SpecificVocabulariesAffiliationsByIdResponse200]]:
     if response.status_code == 200:
-        response_200 = SpecificVocabulariesAffiliationsByIdResponse200.from_dict(response.json())
+        response_200 = SpecificVocabulariesAffiliationsByIdResponse200.from_dict(
+            response.json()
+        )
 
         return response_200
 

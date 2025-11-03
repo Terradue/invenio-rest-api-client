@@ -22,7 +22,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": f"/api/records/{draft_id}/draft/pids/doi",
+        "url": "/api/records/{draft_id}/draft/pids/doi".format(
+            draft_id=draft_id,
+        ),
         "params": params,
     }
 

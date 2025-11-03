@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_featured_community_entry_response_200 import GetFeaturedCommunityEntryResponse200
+from ...models.get_featured_community_entry_response_200 import (
+    GetFeaturedCommunityEntryResponse200,
+)
 from ...types import Response
 
 
@@ -14,7 +16,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/communities/{community_id}/featured",
+        "url": "/api/communities/{community_id}/featured".format(
+            community_id=community_id,
+        ),
     }
 
     return _kwargs

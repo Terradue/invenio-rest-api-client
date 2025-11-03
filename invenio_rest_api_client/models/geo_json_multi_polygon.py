@@ -1,5 +1,10 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Union, cast
+from typing import (
+    Any,
+    TypeVar,
+    Union,
+    cast,
+)
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -72,7 +77,9 @@ class GeoJSONMultiPolygon:
                 coordinates_item_item = []
                 _coordinates_item_item = coordinates_item_item_data
                 for coordinates_item_item_item_data in _coordinates_item_item:
-                    coordinates_item_item_item = cast(list[float], coordinates_item_item_item_data)
+                    coordinates_item_item_item = cast(
+                        list[float], coordinates_item_item_item_data
+                    )
 
                     coordinates_item_item.append(coordinates_item_item_item)
 

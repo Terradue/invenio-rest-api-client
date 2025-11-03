@@ -1,5 +1,10 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    TypeVar,
+    Union,
+)
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -8,7 +13,9 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.access import Access
-    from ..models.create_a_draft_record_body_custom_fields import CreateADraftRecordBodyCustomFields
+    from ..models.create_a_draft_record_body_custom_fields import (
+        CreateADraftRecordBodyCustomFields,
+    )
     from ..models.files import Files
     from ..models.metadata import Metadata
     from ..models.pi_ds import PIDs
@@ -84,7 +91,9 @@ class CreateADraftRecordBody:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.access import Access
-        from ..models.create_a_draft_record_body_custom_fields import CreateADraftRecordBodyCustomFields
+        from ..models.create_a_draft_record_body_custom_fields import (
+            CreateADraftRecordBodyCustomFields,
+        )
         from ..models.files import Files
         from ..models.metadata import Metadata
         from ..models.pi_ds import PIDs

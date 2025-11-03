@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.delete_record_community_response_200 import DeleteRecordCommunityResponse200
+from ...models.delete_record_community_response_200 import (
+    DeleteRecordCommunityResponse200,
+)
 from ...types import Response
 
 
@@ -14,7 +16,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": f"/api/records/{record_id}/communities",
+        "url": "/api/records/{record_id}/communities".format(
+            record_id=record_id,
+        ),
     }
 
     return _kwargs

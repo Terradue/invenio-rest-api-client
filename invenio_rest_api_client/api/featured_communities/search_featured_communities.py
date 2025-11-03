@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.search_featured_communities_response_200 import SearchFeaturedCommunitiesResponse200
+from ...models.search_featured_communities_response_200 import (
+    SearchFeaturedCommunitiesResponse200,
+)
 from ...types import UNSET, Response, Unset
 
 

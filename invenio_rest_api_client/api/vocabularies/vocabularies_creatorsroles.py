@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.vocabularies_creatorsroles_response_200 import VocabulariesCreatorsrolesResponse200
+from ...models.vocabularies_creatorsroles_response_200 import (
+    VocabulariesCreatorsrolesResponse200,
+)
 from ...types import Response
 
 

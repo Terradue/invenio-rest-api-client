@@ -14,7 +14,9 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/groups/{group_id}/avatar.svg",
+        "url": "/api/groups/{group_id}/avatar.svg".format(
+            group_id=group_id,
+        ),
     }
 
     return _kwargs

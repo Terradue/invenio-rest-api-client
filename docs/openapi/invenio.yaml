@@ -4750,6 +4750,7 @@ components:
           type: string
         contributors:
           description: The organisations or persons responsible for collecting, managing, distributing, or otherwise contributing to the development of the resource.
+          type: array
           items:
             $ref: '#/components/schemas/Creator'
         subjects:

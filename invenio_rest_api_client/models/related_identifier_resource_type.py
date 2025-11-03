@@ -1,5 +1,9 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    TypeVar,
+)
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -7,7 +11,9 @@ from attrs import field as _attrs_field
 from ..models.related_identifier_resource_type_id import RelatedIdentifierResourceTypeId
 
 if TYPE_CHECKING:
-    from ..models.related_identifier_resource_type_title import RelatedIdentifierResourceTypeTitle
+    from ..models.related_identifier_resource_type_title import (
+        RelatedIdentifierResourceTypeTitle,
+    )
 
 
 T = TypeVar("T", bound="RelatedIdentifierResourceType")
@@ -44,7 +50,9 @@ class RelatedIdentifierResourceType:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.related_identifier_resource_type_title import RelatedIdentifierResourceTypeTitle
+        from ..models.related_identifier_resource_type_title import (
+            RelatedIdentifierResourceTypeTitle,
+        )
 
         d = dict(src_dict)
         id = RelatedIdentifierResourceTypeId(d.pop("id"))

@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_a_record_files_metadata_response_200 import GetARecordFilesMetadataResponse200
+from ...models.get_a_record_files_metadata_response_200 import (
+    GetARecordFilesMetadataResponse200,
+)
 from ...types import Response
 
 
@@ -15,7 +17,10 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/records/{record_id}/files/{file_name}",
+        "url": "/api/records/{record_id}/files/{file_name}".format(
+            record_id=record_id,
+            file_name=file_name,
+        ),
     }
 
     return _kwargs

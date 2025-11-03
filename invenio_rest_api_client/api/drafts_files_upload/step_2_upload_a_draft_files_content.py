@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.step_2_upload_a_draft_files_content_response_200 import Step2UploadADraftFilesContentResponse200
+from ...models.step_2_upload_a_draft_files_content_response_200 import (
+    Step2UploadADraftFilesContentResponse200,
+)
 from ...types import File, Response
 
 
@@ -19,7 +21,10 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": f"/api/records/{draft_id}/draft/files/{file_name}/content",
+        "url": "/api/records/{draft_id}/draft/files/{file_name}/content".format(
+            draft_id=draft_id,
+            file_name=file_name,
+        ),
     }
 
     _kwargs["content"] = body.payload
@@ -34,7 +39,9 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, Step2UploadADraftFilesContentResponse200]]:
     if response.status_code == 200:
-        response_200 = Step2UploadADraftFilesContentResponse200.from_dict(response.json())
+        response_200 = Step2UploadADraftFilesContentResponse200.from_dict(
+            response.json()
+        )
 
         return response_200
 

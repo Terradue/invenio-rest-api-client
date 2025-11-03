@@ -43,7 +43,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/vocabularies/{vocabularies_type}",
+        "url": "/api/vocabularies/{vocabularies_type}".format(
+            vocabularies_type=vocabularies_type,
+        ),
         "params": params,
     }
 

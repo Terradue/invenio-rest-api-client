@@ -6,7 +6,9 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.createupdate_a_review_request_body import CreateupdateAReviewRequestBody
-from ...models.createupdate_a_review_request_response_200 import CreateupdateAReviewRequestResponse200
+from ...models.createupdate_a_review_request_response_200 import (
+    CreateupdateAReviewRequestResponse200,
+)
 from ...types import Response
 
 
@@ -19,7 +21,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": f"/api/records/{draft_id}/draft/review",
+        "url": "/api/records/{draft_id}/draft/review".format(
+            draft_id=draft_id,
+        ),
     }
 
     _kwargs["json"] = body.to_dict()

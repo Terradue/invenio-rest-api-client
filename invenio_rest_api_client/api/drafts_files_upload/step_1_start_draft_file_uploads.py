@@ -19,7 +19,9 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": f"/api/records/{draft_id}/draft/files",
+        "url": "/api/records/{draft_id}/draft/files".format(
+            draft_id=draft_id,
+        ),
     }
 
     _kwargs["json"] = []

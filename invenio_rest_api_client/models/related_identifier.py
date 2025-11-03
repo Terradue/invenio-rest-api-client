@@ -1,5 +1,10 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    TypeVar,
+    Union,
+)
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -59,7 +64,9 @@ class RelatedIdentifier:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.related_identifier_resource_type import RelatedIdentifierResourceType
+        from ..models.related_identifier_resource_type import (
+            RelatedIdentifierResourceType,
+        )
         from ..models.relation_type import RelationType
 
         d = dict(src_dict)

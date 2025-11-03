@@ -5,7 +5,9 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.get_a_vocabulary_record_by_id_response_200 import GetAVocabularyRecordByIdResponse200
+from ...models.get_a_vocabulary_record_by_id_response_200 import (
+    GetAVocabularyRecordByIdResponse200,
+)
 from ...types import Response
 
 
@@ -15,7 +17,10 @@ def _get_kwargs(
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/api/vocabularies/{vocabularies_type}/{vocabularies_id}",
+        "url": "/api/vocabularies/{vocabularies_type}/{vocabularies_id}".format(
+            vocabularies_type=vocabularies_type,
+            vocabularies_id=vocabularies_id,
+        ),
     }
 
     return _kwargs

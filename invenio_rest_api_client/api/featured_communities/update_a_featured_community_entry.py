@@ -5,8 +5,12 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.update_a_featured_community_entry_body import UpdateAFeaturedCommunityEntryBody
-from ...models.update_a_featured_community_entry_response_200 import UpdateAFeaturedCommunityEntryResponse200
+from ...models.update_a_featured_community_entry_body import (
+    UpdateAFeaturedCommunityEntryBody,
+)
+from ...models.update_a_featured_community_entry_response_200 import (
+    UpdateAFeaturedCommunityEntryResponse200,
+)
 from ...types import Response
 
 
@@ -20,7 +24,10 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "put",
-        "url": f"/api/communities/{community_id}/featured/{featured_entry_id}",
+        "url": "/api/communities/{community_id}/featured/{featured_entry_id}".format(
+            community_id=community_id,
+            featured_entry_id=featured_entry_id,
+        ),
     }
 
     _kwargs["json"] = body.to_dict()
@@ -35,7 +42,9 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, UpdateAFeaturedCommunityEntryResponse200]]:
     if response.status_code == 200:
-        response_200 = UpdateAFeaturedCommunityEntryResponse200.from_dict(response.json())
+        response_200 = UpdateAFeaturedCommunityEntryResponse200.from_dict(
+            response.json()
+        )
 
         return response_200
 

@@ -1,6 +1,12 @@
 import datetime
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    TypeVar,
+    Union,
+    cast,
+)
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -50,7 +56,7 @@ class Metadata:
             rights (Union[Unset, list['Right']]): Rights management statement for the resource.
             copyright_ (Union[Unset, str]): The copyright field allows authors or depositors to specify a copyright
                 statement for the record.
-            contributors (Union[Unset, Any]): The organisations or persons responsible for collecting, managing,
+            contributors (Union[Unset, list['Creator']]): The organisations or persons responsible for collecting, managing,
                 distributing, or otherwise contributing to the development of the resource.
             subjects (Union[Unset, list['Subject']]): Subject, keyword, classification code, or key phrase describing the
                 resource.
@@ -80,7 +86,7 @@ class Metadata:
     additional_descriptions: Union[Unset, list["AdditionalDescription"]] = UNSET
     rights: Union[Unset, list["Right"]] = UNSET
     copyright_: Union[Unset, str] = UNSET
-    contributors: Union[Unset, Any] = UNSET
+    contributors: Union[Unset, list["Creator"]] = UNSET
     subjects: Union[Unset, list["Subject"]] = UNSET
     languages: Union[Unset, list["Lang"]] = UNSET
     dates: Union[Unset, list["Date"]] = UNSET
@@ -121,7 +127,9 @@ class Metadata:
         if not isinstance(self.additional_descriptions, Unset):
             additional_descriptions = []
             for additional_descriptions_item_data in self.additional_descriptions:
-                additional_descriptions_item = additional_descriptions_item_data.to_dict()
+                additional_descriptions_item = (
+                    additional_descriptions_item_data.to_dict()
+                )
                 additional_descriptions.append(additional_descriptions_item)
 
         rights: Union[Unset, list[dict[str, Any]]] = UNSET
@@ -133,7 +141,12 @@ class Metadata:
 
         copyright_ = self.copyright_
 
-        contributors = self.contributors
+        contributors: Union[Unset, list[dict[str, Any]]] = UNSET
+        if not isinstance(self.contributors, Unset):
+            contributors = []
+            for contributors_item_data in self.contributors:
+                contributors_item = contributors_item_data.to_dict()
+                contributors.append(contributors_item)
 
         subjects: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.subjects, Unset):
@@ -284,7 +297,9 @@ class Metadata:
         additional_titles = []
         _additional_titles = d.pop("additional_titles", UNSET)
         for additional_titles_item_data in _additional_titles or []:
-            additional_titles_item = AdditionalTitle.from_dict(additional_titles_item_data)
+            additional_titles_item = AdditionalTitle.from_dict(
+                additional_titles_item_data
+            )
 
             additional_titles.append(additional_titles_item)
 
@@ -293,7 +308,9 @@ class Metadata:
         additional_descriptions = []
         _additional_descriptions = d.pop("additional_descriptions", UNSET)
         for additional_descriptions_item_data in _additional_descriptions or []:
-            additional_descriptions_item = AdditionalDescription.from_dict(additional_descriptions_item_data)
+            additional_descriptions_item = AdditionalDescription.from_dict(
+                additional_descriptions_item_data
+            )
 
             additional_descriptions.append(additional_descriptions_item)
 
@@ -306,7 +323,12 @@ class Metadata:
 
         copyright_ = d.pop("copyright", UNSET)
 
-        contributors = d.pop("contributors", UNSET)
+        contributors = []
+        _contributors = d.pop("contributors", UNSET)
+        for contributors_item_data in _contributors or []:
+            contributors_item = Creator.from_dict(contributors_item_data)
+
+            contributors.append(contributors_item)
 
         subjects = []
         _subjects = d.pop("subjects", UNSET)
@@ -341,7 +363,9 @@ class Metadata:
         related_identifiers = []
         _related_identifiers = d.pop("related_identifiers", UNSET)
         for related_identifiers_item_data in _related_identifiers or []:
-            related_identifiers_item = RelatedIdentifier.from_dict(related_identifiers_item_data)
+            related_identifiers_item = RelatedIdentifier.from_dict(
+                related_identifiers_item_data
+            )
 
             related_identifiers.append(related_identifiers_item)
 

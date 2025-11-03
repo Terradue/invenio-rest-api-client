@@ -1,5 +1,9 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    TypeVar,
+)
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -7,7 +11,9 @@ from attrs import field as _attrs_field
 from ..models.additional_description_type_id import AdditionalDescriptionTypeId
 
 if TYPE_CHECKING:
-    from ..models.additional_description_type_title import AdditionalDescriptionTypeTitle
+    from ..models.additional_description_type_title import (
+        AdditionalDescriptionTypeTitle,
+    )
 
 
 T = TypeVar("T", bound="AdditionalDescriptionType")
@@ -44,7 +50,9 @@ class AdditionalDescriptionType:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.additional_description_type_title import AdditionalDescriptionTypeTitle
+        from ..models.additional_description_type_title import (
+            AdditionalDescriptionTypeTitle,
+        )
 
         d = dict(src_dict)
         id = AdditionalDescriptionTypeId(d.pop("id"))

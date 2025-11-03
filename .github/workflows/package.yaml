@@ -14,7 +14,7 @@ on:
     - develop
     - main
     paths:
-    - invenio-rest-api-client/**
+    - invenio_rest_api_client/**
     - .github/workflows/package.yaml
   release:
     types:

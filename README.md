@@ -1,4 +1,8 @@
 # invenio-rest-api-client
+
+[![PyPI - Version](https://img.shields.io/pypi/v/invenio-rest-api-client.svg)](https://pypi.org/project/invenio-rest-api-client)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/invenio-rest-api-client.svg)](https://pypi.org/project/invenio-rest-api-client)
+
 A client library for accessing Invenio REST API
 
 ## Usage
@@ -108,3 +112,7 @@ client = Client(
 # Note that base_url needs to be re-set, as would any shared cookies, headers, etc.
 client.set_httpx_client(httpx.Client(base_url="https://api.example.com", proxies="http://localhost:8030"))
 ```
+
+## License
+
+[![Apache License, Version 2.0](https://img.shields.io/badge/license-Apache%20License%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)

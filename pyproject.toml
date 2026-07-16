@@ -37,7 +37,7 @@ dependencies = [
 allow-direct-references = true
 
 [project.urls]
-Documentation = "https://github.com/Terradue/invenio-rest-api-client#readme"
+Documentation = "https://terradue.github.io/invenio-rest-api-client/"
 Issues = "https://github.com/Terradue/invenio-rest-api-client/issues"
 Source = "https://github.com/Terradue/invenio-rest-api-client"
 

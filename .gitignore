@@ -1,1 +1,7 @@
 docs/openapi/invenio_bundled.yaml
+.ruff_cache
+.task
+__pycache__
+uv.lock
+.coverage
+site/

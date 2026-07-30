@@ -10,7 +10,7 @@ openapi: 3.1.1
 info:
   title: Invenio REST API
   description: "## **Summary**\nThe following document is a reference guide for all the REST APIs that InvenioRDM exposes.\n## **Resources**\n- \U0001F4DA [Product documentation](https://inveniordm.docs.cern.ch)\n- \U0001F517 [OpenAPI GitHub repository](https://github.com/inveniosoftware/invenio-openapi)\n- \U0001F310 [Invenio project](https://inveniosoftware.org)\n- \U0001F4AC [Community support](https://inveniordm-dev.docs.cern.ch/install/troubleshoot/)"
-  version: 12.0.0
+  version: 12.0.3
   contact:
     name: InvenioRDM Documentation
     url: https://inveniordm.docs.cern.ch
@@ -3974,21 +3974,24 @@ components:
         versions:
           $ref: '#/components/schemas/Version'
 
+    FileTransferType:
+      description: The actual technology that is used to store a file
+      type: string
+      enum:
+      # Local
+      - L
+      # Fetch
+      - F
+      # Multipart
+      - M
+      # Remote
+      - R
+
     FileTransfer:
       type: object
       properties:
         type:
-          description: The actual technology that is used to store a file
-          type: string
-          enum:
-          # Local
-          - L
-          # Fetch
-          - F
-          # Multipart
-          - M
-          # Remote
-          - R
+          $ref: '#/components/schemas/FileTransferType'
         url:
           description: URL to fetch the file from
           type: string
@@ -4033,6 +4036,26 @@ components:
           description: Explanation for the embargo.
           type: string
 
+    AccessRecord:
+      description: |
+        Read access to the record.
+
+        `public` means anyone can see the record/files, `restricted` means only the owner(s) or specific users can see the record/files.
+      type: string
+      enum:
+      - public
+      - restricted
+
+    AccessFiles:
+      description: |
+        Read access to the record's files.
+
+        `public` means anyone can see the record/files, `restricted` means only the owner(s) or specific users can see the record/files.
+      type: string
+      enum:
+      - public
+      - restricted
+
     Access:
       description: |
         Denotes record-specific read (visibility) options.
@@ -4044,23 +4067,9 @@ components:
       - files
       properties:
         record:
-          description: |
-            Read access to the record.
-
-            `public` means anyone can see the record/files, `restricted` means only the owner(s) or specific users can see the record/files.
-          type: string
-          enum:
-          - public
-          - restricted
+          $ref: '#/components/schemas/AccessRecord'
         files:
-          description: |
-            Read access to the record's files.
-
-            `public` means anyone can see the record/files, `restricted` means only the owner(s) or specific users can see the record/files.
-          type: string
-          enum:
-          - public
-          - restricted
+          $ref: '#/components/schemas/AccessFiles'
         embargo:
           $ref: '#/components/schemas/Embargo'
 
@@ -4083,6 +4092,56 @@ components:
           items:
             type: string
 
+    ResourceTypeId:
+      description: The resource type id from the controlled vocabulary.
+      type: string
+      enum:
+      - publication
+      - publication-annotationcollection
+      - publication-book
+      - publication-section
+      - publication-conferencepaper
+      - publication-conferenceproceeding
+      - publication-datamanagementplan
+      - publication-journal
+      - publication-article
+      - publication-patent
+      - publication-peerreview
+      - publication-preprint
+      - publication-deliverable
+      - publication-milestone
+      - publication-proposal
+      - publication-report
+      - publication-softwaredocumentation
+      - publication-taxonomictreatment
+      - publication-technicalnote
+      - publication-thesis
+      - publication-workingpaper
+      - publication-datapaper
+      - publication-dissertation
+      - publication-standard
+      - publication-other
+      - poster
+      - presentation
+      - event
+      - dataset
+      - image
+      - image-figure
+      - image-plot
+      - image-drawing
+      - image-diagram
+      - image-photo
+      - image-other
+      - model
+      - video
+      - audio
+      - software
+      - lesson
+      - software-computationalnotebook
+      - other
+      - physicalobject
+      - workflow
+
     ResourceType:
       description: The type of the resource described by the record.
       type: object
@@ -4090,54 +4149,7 @@ components:
       - id
       properties:
         id:
-          description: The resource type id from the controlled vocabulary.
-          type: string
-          enum:
-          - publication
-          - publication-annotationcollection
-          - publication-book
-          - publication-section
-          - publication-conferencepaper
-          - publication-conferenceproceeding
-          - publication-datamanagementplan
-          - publication-journal
-          - publication-article
-          - publication-patent
-          - publication-peerreview
-          - publication-preprint
-          - publication-deliverable
-          - publication-milestone
-          - publication-proposal
-          - publication-report
-          - publication-softwaredocumentation
-          - publication-taxonomictreatment
-          - publication-technicalnote
-          - publication-thesis
-          - publication-workingpaper
-          - publication-datapaper
-          - publication-dissertation
-          - publication-standard
-          - publication-other
-          - poster
-          - presentation
-          - event
-          - dataset
-          - image
-          - image-figure
-          - image-plot
-          - image-drawing
-          - image-diagram
-          - image-photo
-          - image-other
-          - model
-          - video
-          - audio
-          - software
-          - lesson
-          - software-computationalnotebook
-          - other
-          - physicalobject
-          - workflow
+          $ref: '#/components/schemas/ResourceTypeId'
 
     PersonOrOrgIdentifierScheme:
       description: |
@@ -4168,6 +4180,13 @@ components:
           description: Actual value of the identifier.
           type: string
 
+    PersonOrOrgType:
+      description: The type of name.
+      type: string
+      enum:
+      - personal
+      - organizational
+
     PersonOrOrg:
       description: The person or organization.
       type: object
@@ -4175,11 +4194,7 @@ components:
       - type
       properties:
         type:
-          description: The type of name.
-          type: string
-          enum:
-          - personal
-          - organizational
+          $ref: '#/components/schemas/PersonOrOrgType'
         given_name:
           description: Given name(s).
           type: string
@@ -4198,6 +4213,32 @@ components:
           items:
             $ref: '#/components/schemas/Identifier'
 
+    RoleId:
+      description: The role's controlled vocabulary identifier.
+      type: string
+      enum:
+      - contactperson
+      - datacollector
+      - datacurator
+      - datamanager
+      - distributor
+      - editor
+      - hostinginstitution
+      - producer
+      - projectleader
+      - projectmanager
+      - projectmember
+      - registrationagency
+      - registrationauthority
+      - relatedperson
+      - researcher
+      - researchgroup
+      - rightsholder
+      - sponsor
+      - supervisor
+      - workpackageleader
+      - other
+
     Role:
       description: The role of the person or organisation selected from a customizable controlled vocabulary.
       type: object
@@ -4205,30 +4246,7 @@ components:
       - id
       properties:
         id:
-          description: The role's controlled vocabulary identifier.
-          type: string
-          enum:
-          - contactperson
-          - datacollector
-          - datacurator
-          - datamanager
-          - distributor
-          - editor
-          - hostinginstitution
-          - producer
-          - projectleader
-          - projectmanager
-          - projectmember
-          - registrationagency
-          - registrationauthority
-          - relatedperson
-          - researcher
-          - researchgroup
-          - rightsholder
-          - sponsor
-          - supervisor
-          - workpackageleader
-          - other
+          $ref: '#/components/schemas/RoleId'
 
     Affiliation:
       description: |
@@ -4258,6 +4276,15 @@ components:
           items:
             $ref: '#/components/schemas/Affiliation'
 
+    AdditionalTitleTypeId:
+      description: Title type id from the controlled vocabulary.
+      type: string
+      enum:
+      - alternative-title
+      - subtitle
+      - translated-title
+      - other
+
     AdditionalTitleType:
       description: The type of the title.
       type: object
@@ -4266,13 +4293,7 @@ components:
       - title
       properties:
         id:
-          description: Title type id from the controlled vocabulary.
-          type: string
-          enum:
-          - alternative-title
-          - subtitle
-          - translated-title
-          - other
+          $ref: '#/components/schemas/AdditionalTitleTypeId'
         title:
           description: The corresponding localized human readable label
           type: object
@@ -4303,6 +4324,17 @@ components:
         lang:
           $ref: '#/components/schemas/Lang'
 
+    AdditionalDescriptionTypeId:
+      description: Description type id from the controlled vocabulary
+      type: string
+      enum:
+      - abstract
+      - methods
+      - series-information
+      - table-of-contents
+      - technical-info
+      - other
+
     AdditionalDescriptionType:
       description: The type of the description.
       type: object
@@ -4311,15 +4343,7 @@ components:
       - title
       properties:
         id:
-          description: Description type id from the controlled vocabulary
-          type: string
-          enum:
-          - abstract
-          - methods
-          - series-information
-          - table-of-contents
-          - technical-info
-          - other
+          $ref: '#/components/schemas/AdditionalDescriptionTypeId'
         title:
           description: The corresponding localized human readable label.
           type: object
@@ -4371,6 +4395,22 @@ components:
           description: A custom keyword.
           type: string
 
+    DateTypeId:
+      description: Date type id from the controlled vocabulary
+      type: string
+      enum:
+      - accepted
+      - available
+      - collected
+      - copyrighted
+      - created
+      - issued
+      - other
+      - submitted
+      - updated
+      - valid
+      - withdrawn
+
     DateType:
       description: The type of date.
       type: object
@@ -4379,20 +4419,7 @@ components:
       - title
       properties:
         id:
-          description: Date type id from the controlled vocabulary
-          type: string
-          enum:
-          - accepted
-          - available
-          - collected
-          - copyrighted
-          - created
-          - issued
-          - other
-          - submitted
-          - updated
-          - valid
-          - withdrawn
+          $ref: '#/components/schemas/DateTypeId'
         title:
           description: The corresponding localized human readable label
           type: object
@@ -4455,6 +4482,45 @@ components:
         scheme:
           $ref: '#/components/schemas/IdentifierScheme'
 
+    RelationTypeId:
+      description: Relation type id from the controlled vocabulary
+      type: string
+      enum:
+      - iscitedby
+      - cites
+      - issupplementto
+      - issupplementedby
+      - iscontinuedby
+      - continues
+      - isdescribedby
+      - describes
+      - hasmetadata
+      - ismetadatafor
+      - hasversion
+      - isversionof
+      - isnewversionof
+      - ispreviousversionof
+      - ispartof
+      - haspart
+      - ispublishedin
+      - isreferencedby
+      - references
+      - isdocumentedby
+      - documents
+      - iscompiledby
+      - compiles
+      - isvariantformof
+      - isoriginalformof
+      - isidenticalto
+      - isreviewedby
+      - reviews
+      - isderivedfrom
+      - issourceof
+      - isrequiredby
+      - requires
+      - isobsoletedby
+      - obsoletes
+
     RelationType:
       description: The relation of the record to this related resource.
       type: object
@@ -4463,47 +4529,61 @@ components:
       - title
       properties:
         id:
-          description: Relation type id from the controlled vocabulary
-          type: string
-          enum:
-          - iscitedby
-          - cites
-          - issupplementto
-          - issupplementedby
-          - iscontinuedby
-          - continues
-          - isdescribedby
-          - describes
-          - hasmetadata
-          - ismetadatafor
-          - hasversion
-          - isversionof
-          - isnewversionof
-          - ispreviousversionof
-          - ispartof
-          - haspart
-          - ispublishedin
-          - isreferencedby
-          - references
-          - isdocumentedby
-          - documents
-          - iscompiledby
-          - compiles
-          - isvariantformof
-          - isoriginalformof
-          - isidenticalto
-          - isreviewedby
-          - reviews
-          - isderivedfrom
-          - issourceof
-          - isrequiredby
-          - requires
-          - isobsoletedby
-          - obsoletes
+          $ref: '#/components/schemas/RelationTypeId'
         title:
           description: The corresponding localized human readable label
           type: object
           additionalProperties: true
+
+    RelatedIdentifierResourceTypeId:
+      description: Date type id from the controlled vocabulary.
+      type: string
+      enum:
+      - publication
+      - publication-annotationcollection
+      - publication-book
+      - publication-section
+      - publication-conferencepaper
+      - publication-conferenceproceeding
+      - publication-datamanagementplan
+      - publication-journal
+      - publication-article
+      - publication-patent
+      - publication-peerreview
+      - publication-preprint
+      - publication-deliverable
+      - publication-milestone
+      - publication-proposal
+      - publication-report
+      - publication-softwaredocumentation
+      - publication-taxonomictreatment
+      - publication-technicalnote
+      - publication-thesis
+      - publication-workingpaper
+      - publication-datapaper
+      - publication-dissertation
+      - publication-standard
+      - publication-other
+      - poster
+      - presentation
+      - event
+      - dataset
+      - image
+      - image-figure
+      - image-plot
+      - image-drawing
+      - image-diagram
+      - image-photo
+      - image-other
+      - model
+      - video
+      - audio
+      - software
+      - lesson
+      - software-computationalnotebook
+      - other
+      - physicalobject
+      - workflow
 
     RelatedIdentifierResourceType:
       description: The resource type of the related resource
@@ -4513,54 +4593,7 @@ components:
       - title
       properties:
         id:
-          description: Date type id from the controlled vocabulary.
-          type: string
-          enum:
-          - publication
-          - publication-annotationcollection
-          - publication-book
-          - publication-section
-          - publication-conferencepaper
-          - publication-conferenceproceeding
-          - publication-datamanagementplan
-          - publication-journal
-          - publication-article
-          - publication-patent
-          - publication-peerreview
-          - publication-preprint
-          - publication-deliverable
-          - publication-milestone
-          - publication-proposal
-          - publication-report
-          - publication-softwaredocumentation
-          - publication-taxonomictreatment
-          - publication-technicalnote
-          - publication-thesis
-          - publication-workingpaper
-          - publication-datapaper
-          - publication-dissertation
-          - publication-standard
-          - publication-other
-          - poster
-          - presentation
-          - event
-          - dataset
-          - image
-          - image-figure
-          - image-plot
-          - image-drawing
-          - image-diagram
-          - image-photo
-          - image-other
-          - model
-          - video
-          - audio
-          - software
-          - lesson
-          - software-computationalnotebook
-          - other
-          - physicalobject
-          - workflow
+          $ref: '#/components/schemas/RelatedIdentifierResourceTypeId'
         title:
           description: The corresponding localized human readable label
           type: object

@@ -1,118 +1,204 @@
-# invenio-rest-api-client
+# Invenio REST API Client
 
 [![PyPI - Version](https://img.shields.io/pypi/v/invenio-rest-api-client.svg)](https://pypi.org/project/invenio-rest-api-client)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/invenio-rest-api-client.svg)](https://pypi.org/project/invenio-rest-api-client)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-A client library for accessing Invenio REST API
+A typed Python client for the InvenioRDM REST API, with particular emphasis on
+the lifecycle of records and drafts.
 
-## Usage
-First, create a client:
+## Why this project exists
 
-```python
-from invenio_rest_api_client import Client
+The [original Invenio OpenAPI description](https://inveniosoftware.github.io/invenio-openapi/)
+documented the available operations, but at the time this client was developed
+it did not provide the response schemas required to generate a useful typed
+client.
 
-client = Client(base_url="https://api.example.com")
+This project therefore follows a schema-first reconstruction workflow:
+
+1. study the [human-readable InvenioRDM REST API documentation](https://inveniordm.docs.cern.ch/reference/rest_api_drafts_records/);
+2. reconstruct the missing data and response schemas from the documented
+   fields and examples;
+3. add those schemas to the OpenAPI description;
+4. generate Pydantic models and a Python client from the enhanced contract.
+
+Most examples and validation work focus on operations associated with the
+OpenAPI `Records` tag and the related draft, file, and version endpoints.
+
+## Install
+
+```console
+pip install invenio-rest-api-client
 ```
 
-If the endpoints you're going to hit require authentication, use `AuthenticatedClient` instead:
+Python 3.10 or newer is required.
+
+## Configure a client
+
+Create an API token in your InvenioRDM account and expose the instance URL and
+token as environment variables:
+
+```console
+export INVENIO_BASE_URL="https://invenio.example.org"
+export INVENIO_TOKEN="replace-with-your-token"
+```
+
+Then create an authenticated client:
 
 ```python
+import os
+
 from invenio_rest_api_client import AuthenticatedClient
 
-client = AuthenticatedClient(base_url="https://api.example.com", token="SuperSecretToken")
-```
-
-Now call your endpoint and use your models:
-
-```python
-from invenio_rest_api_client.models import MyDataModel
-from invenio_rest_api_client.api.my_tag import get_my_data_model
-from invenio_rest_api_client.types import Response
-
-with client as client:
-    my_data: MyDataModel = get_my_data_model.sync(client=client)
-    # or if you need more info (e.g. status_code)
-    response: Response[MyDataModel] = get_my_data_model.sync_detailed(client=client)
-```
-
-Or do the same thing with an async version:
-
-```python
-from invenio_rest_api_client.models import MyDataModel
-from invenio_rest_api_client.api.my_tag import get_my_data_model
-from invenio_rest_api_client.types import Response
-
-async with client as client:
-    my_data: MyDataModel = await get_my_data_model.asyncio(client=client)
-    response: Response[MyDataModel] = await get_my_data_model.asyncio_detailed(client=client)
-```
-
-By default, when you're calling an HTTPS API it will attempt to verify that SSL is working correctly. Using certificate verification is highly recommended most of the time, but sometimes you may need to authenticate to a server (especially an internal server) using a custom certificate bundle.
-
-```python
 client = AuthenticatedClient(
-    base_url="https://internal_api.example.com", 
-    token="SuperSecretToken",
-    verify_ssl="/path/to/certificate_bundle.pem",
+    base_url=os.environ["INVENIO_BASE_URL"],
+    token=os.environ["INVENIO_TOKEN"],
+    raise_on_unexpected_status=True,
 )
 ```
 
-You can also disable certificate validation altogether, but beware that **this is a security risk**.
+## Search and retrieve records
+
+Every endpoint module provides `sync`, `sync_detailed`, `asyncio`, and
+`asyncio_detailed` functions.
 
 ```python
-client = AuthenticatedClient(
-    base_url="https://internal_api.example.com", 
-    token="SuperSecretToken", 
-    verify_ssl=False
+from invenio_rest_api_client.api.records import (
+    get_a_record_by_id,
+    search_records,
 )
+
+with client:
+    results = search_records.sync(
+        client=client,
+        q='metadata.title:"climate"',
+        size="10",
+        page="1",
+    )
+
+    record = get_a_record_by_id.sync(
+        "abcde-12345",
+        client=client,
+    )
 ```
 
-Things to know:
-1. Every path/method combo becomes a Python module with four functions:
-    1. `sync`: Blocking request that returns parsed data (if successful) or `None`
-    1. `sync_detailed`: Blocking request that always returns a `Request`, optionally with `parsed` set if the request was successful.
-    1. `asyncio`: Like `sync` but async instead of blocking
-    1. `asyncio_detailed`: Like `sync_detailed` but async instead of blocking
-
-1. All path/query params, and bodies become method arguments.
-1. If your endpoint had any tags on it, the first tag will be used as a module name for the function (my_tag above)
-1. Any endpoint which did not have a tag will be in `invenio_rest_api_client.api.default`
-
-## Advanced customizations
-
-There are more settings on the generated `Client` class which let you control more runtime behavior, check out the docstring on that class for more info. You can also customize the underlying `httpx.Client` or `httpx.AsyncClient` (depending on your use-case):
+Use the detailed form when status codes, headers, or raw response content
+matter:
 
 ```python
-from invenio_rest_api_client import Client
+from http import HTTPStatus
 
-def log_request(request):
-    print(f"Request event hook: {request.method} {request.url} - Waiting for response")
+from invenio_rest_api_client.api.records import get_a_record_by_id
 
-def log_response(response):
-    request = response.request
-    print(f"Response event hook: {request.method} {request.url} - Status {response.status_code}")
+with client:
+    response = get_a_record_by_id.sync_detailed(
+        "abcde-12345",
+        client=client,
+    )
 
-client = Client(
-    base_url="https://api.example.com",
-    httpx_args={"event_hooks": {"request": [log_request], "response": [log_response]}},
-)
-
-# Or get the underlying httpx client to modify directly with client.get_httpx_client() or client.get_async_httpx_client()
+if response.status_code is HTTPStatus.OK:
+    record = response.parsed
+else:
+    raise RuntimeError(
+        f"Invenio returned {response.status_code}: "
+        f"{response.content.decode(errors='replace')}"
+    )
 ```
 
-You can even set the httpx client directly, but beware that this will override any existing settings (e.g., base_url):
+## Create and publish a record
+
+The generated request models make the minimum record metadata explicit:
 
 ```python
-import httpx
-from invenio_rest_api_client import Client
+from datetime import date
 
-client = Client(
-    base_url="https://api.example.com",
+from invenio_rest_api_client.api.drafts import publish_a_draft_record
+from invenio_rest_api_client.api.records import create_a_draft_record
+from invenio_rest_api_client.models import (
+    Access,
+    AccessFiles,
+    AccessRecord,
+    CreateADraftRecordBody,
+    Creator,
+    Files,
+    Metadata,
+    PersonOrOrg,
+    PersonOrOrgType,
+    ResourceType,
+    ResourceTypeId,
 )
-# Note that base_url needs to be re-set, as would any shared cookies, headers, etc.
-client.set_httpx_client(httpx.Client(base_url="https://api.example.com", proxies="http://localhost:8030"))
+
+body = CreateADraftRecordBody(
+    access=Access(
+        record=AccessRecord.PUBLIC,
+        files=AccessFiles.PUBLIC,
+    ),
+    files=Files(enabled=False),
+    metadata=Metadata(
+        resource_type=ResourceType(id=ResourceTypeId.DATASET),
+        title="Climate observations",
+        publication_date=date.today(),
+        creators=[
+            Creator(
+                person_or_org=PersonOrOrg(
+                    type=PersonOrOrgType.PERSONAL,
+                    given_name="Ada",
+                    family_name="Lovelace",
+                )
+            )
+        ],
+        publisher="Example Repository",
+    ),
+)
+
+with client:
+    draft = create_a_draft_record.sync(client=client, body=body)
+    if draft is None or draft.id is None:
+        raise RuntimeError("Invenio did not return the created draft")
+
+    published = publish_a_draft_record.sync(draft.id, client=client)
+    if published is None:
+        raise RuntimeError("Invenio did not return the published record")
+```
+
+## Async usage
+
+The async API mirrors the synchronous API:
+
+```python
+from invenio_rest_api_client.api.records import get_a_record_by_id
+
+async with client:
+    record = await get_a_record_by_id.asyncio(
+        "abcde-12345",
+        client=client,
+    )
+```
+
+## Documentation
+
+The documentation follows the [Diátaxis](https://diataxis.fr/) convention:
+
+- [Tutorial: create your first record](https://terradue.github.io/invenio-rest-api-client/tutorials/first-record/)
+- [How-to guides](https://terradue.github.io/invenio-rest-api-client/how-to/authenticate/)
+- [Record API reference](https://terradue.github.io/invenio-rest-api-client/reference/records/)
+- [Why the schemas were reconstructed](https://terradue.github.io/invenio-rest-api-client/explanation/schema-reconstruction/)
+- [Enhanced OpenAPI reference](https://terradue.github.io/invenio-rest-api-client/openapi/invenio.html)
+
+## Development
+
+Run the test and quality suite with:
+
+```console
+task quality:pre-commit:run
+```
+
+Build the documentation locally with:
+
+```console
+mkdocs build --strict
 ```
 
 ## License
 
-[![Apache License, Version 2.0](https://img.shields.io/badge/license-Apache%20License%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
+Licensed under the [Apache License 2.0](LICENSE).

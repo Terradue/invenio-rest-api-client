@@ -1,22 +1,19 @@
-# invenio-rest-api-client (c) 2025
-#
-# invenio-rest-api-client is licensed under
-# Creative Commons Attribution-ShareAlike 4.0 International.
-#
-# You should have received a copy of the license along with this work.
-# If not, see <https://creativecommons.org/licenses/by-sa/4.0/>.
-
-site_name: invenio-rest-api-client
+site_name: Invenio REST API Client
+site_description: Typed Python client for the InvenioRDM REST API
 site_url: https://terradue.github.io/invenio-rest-api-client/
 site_author: Fabrice Brito, Simone Tripodi
 repo_url: https://github.com/Terradue/invenio-rest-api-client/
 repo_name: Terradue/invenio-rest-api-client
 
 theme:
-    logo: imgs/icon-eoap.png
-    name: material
-
-    palette:
+  name: material
+  logo: imgs/icon-eoap.png
+  features:
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+  palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
       toggle:
@@ -30,47 +27,32 @@ theme:
 
 plugins:
   - search
-  - mermaid2:
-      version: 11.4.1
-  - mkdocs-jupyter:
-      execute: true
-      show_input: True
-      no_input: False
 
 markdown_extensions:
-  - pymdownx.details
   - abbr
   - admonition
-  - footnotes
-  - pymdownx.caret
-  - pymdownx.mark
-  - pymdownx.tilde
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.superfences
-  - pymdownx.tabbed
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_div_format
   - attr_list
-  - pymdownx.snippets:
-      base_path: './'
+  - footnotes
+  - pymdownx.details
   - pymdownx.highlight:
       line_spans: __span
-
-extra_css:
-  - styles/css/app.css
-  
-extra_javascript:
-  - javascripts/config.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
 
 nav:
-  - index.md
-  - OpenAPI: ./openapi/invenio.html
-  - API doc: ./api/latest/invenio_rest_api_client/index.md
+  - Home: index.md
+  - Tutorials:
+      - Create your first record: tutorials/first-record.md
+  - How-to guides:
+      - Authenticate: how-to/authenticate.md
+      - Search and retrieve records: how-to/search-records.md
+      - Create and publish a record: how-to/create-and-publish.md
+  - Reference:
+      - Record APIs: reference/records.md
+      - Client configuration: reference/client.md
+      - Enhanced OpenAPI: openapi/invenio.html
+  - Explanation:
+      - Why schemas were reconstructed: explanation/schema-reconstruction.md
 
-copyright: <a href="https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey.svg">License CC BY-SA 4.0</a>, by <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons</a>
+copyright: Copyright 2026 Terradue. Licensed under the Apache License 2.0.

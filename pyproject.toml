@@ -28,9 +28,9 @@ classifiers = [
 ]
 dependencies = [
   "httpx>=0.23.0,<0.29.0",
-  "attrs>=22.2.0",
+  "attrs>=26.1.0",
   "pydantic==2.13.4",
-  "python-dateutil>=2.8.2",
+  "python-dateutil>=2.9.0.post0",
   "loguru==0.7.3"
 ]
 
@@ -70,7 +70,7 @@ dependencies = [
   "pytest>=8.4,<10",
   "pytest-cov>=6.2,<8",
   "httpx>=0.23.0,<0.29.0",
-  "attrs>=22.2.0",
+  "attrs>=26.1.0",
   "python-dateutil>=2.8.2",
   "loguru"
 ]

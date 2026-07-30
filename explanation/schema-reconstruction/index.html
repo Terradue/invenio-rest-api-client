@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Fabrice Brito, Simone Tripodi" /><link rel="canonical" href="https://terradue.github.io/invenio-rest-api-client/explanation/schema-reconstruction/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Why schemas were reconstructed - Invenio REST API Client</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Why schemas were reconstructed";
+        var mkdocs_page_input_path = "explanation/schema-reconstruction.md";
+        var mkdocs_page_url = "/invenio-rest-api-client/explanation/schema-reconstruction/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../..">
+          <img src="../../imgs/icon-eoap.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/first-record/">Create your first record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">How-to guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/authenticate/">Authenticate</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/search-records/">Search and retrieve records</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/create-and-publish/">Create and publish a record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/records/">Record APIs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/client/">Client configuration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/invenio.html">Enhanced OpenAPI</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Explanation</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Why schemas were reconstructed</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#the-original-gap">The original gap</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-human-readable-source">The human-readable source</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-reconstruction-pipeline">The reconstruction pipeline</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#why-focus-on-records">Why focus on Records</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-this-approach-provides">What this approach provides</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Invenio REST API Client</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Explanation</li>
+      <li class="breadcrumb-item active">Why schemas were reconstructed</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/Terradue/invenio-rest-api-client/edit/master/docs/explanation/schema-reconstruction.md">Edit on Terradue/invenio-rest-api-client</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="why-the-schemas-were-reconstructed">Why the schemas were reconstructed</h1>
+<p>This client exists because an API operation list alone is not enough to
+generate a useful typed SDK.</p>
+<h2 id="the-original-gap">The original gap</h2>
+<p>The <a href="https://inveniosoftware.github.io/invenio-openapi/">original Invenio OpenAPI site</a>
+provided a machine-readable catalogue of InvenioRDM endpoints. At the time this
+work began, however, response payloads did not provide the schemas needed to
+describe their data shapes.</p>
+<p>That omission matters to a generator. Without a response schema it can produce
+an HTTP call, but it cannot reliably determine:</p>
+<ul>
+<li>which Python model to return;</li>
+<li>which fields are required or optional;</li>
+<li>which nested objects and enumerations exist;</li>
+<li>how dates, identifiers, access settings, and record metadata should be
+  validated;</li>
+<li>whether a change in the response contract is compatible.</li>
+</ul>
+<p>The generated result would therefore be dominated by unstructured dictionaries
+or <code>Any</code>, losing much of the value of a typed client.</p>
+<h2 id="the-human-readable-source">The human-readable source</h2>
+<p>The missing semantics were available in the
+<a href="https://inveniordm.docs.cern.ch/reference/rest_api_drafts_records/">InvenioRDM Drafts and Records reference</a>.
+Its prose, field tables, and JSON examples explain real payloads for operations
+such as:</p>
+<ul>
+<li>creating a draft;</li>
+<li>uploading and committing files;</li>
+<li>publishing a draft;</li>
+<li>retrieving records;</li>
+<li>managing access links and versions.</li>
+</ul>
+<p>Those documents are designed for people, not code generators. The work in this
+repository translates that human-readable contract into machine-readable
+schemas.</p>
+<h2 id="the-reconstruction-pipeline">The reconstruction pipeline</h2>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1">Human-readable InvenioRDM documentation
+</span><span id="__span-0-2">                  |
+</span><span id="__span-0-3">                  v
+</span><span id="__span-0-4">Reconstructed request, metadata, and response schemas
+</span><span id="__span-0-5">                  |
+</span><span id="__span-0-6">                  v
+</span><span id="__span-0-7">Enhanced OpenAPI contract
+</span><span id="__span-0-8">                  |
+</span><span id="__span-0-9">          +-------+-------+
+</span><span id="__span-0-10">          |               |
+</span><span id="__span-0-11">          v               v
+</span><span id="__span-0-12">Generated API modules   Pydantic models
+</span><span id="__span-0-13">          |               |
+</span><span id="__span-0-14">          +-------+-------+
+</span><span id="__span-0-15">                  |
+</span><span id="__span-0-16">                  v
+</span><span id="__span-0-17">        Typed Python client
+</span></code></pre></div>
+<p>The practical sequence is:</p>
+<ol>
+<li>identify the payload fields and constraints in the textual documentation;</li>
+<li>model reusable concepts such as <code>Metadata</code>, <code>Creator</code>, <code>Access</code>, <code>Files</code>,
+   persistent identifiers, and the created record response;</li>
+<li>connect those schemas to requests and responses in the OpenAPI document;</li>
+<li>bundle and validate the enhanced contract;</li>
+<li>generate endpoint modules and Pydantic models;</li>
+<li>exercise the generated behavior with contract and unit tests.</li>
+</ol>
+<h2 id="why-focus-on-records">Why focus on Records</h2>
+<p>Records are the central resource in InvenioRDM and touch multiple stages:</p>
+<div class="highlight"><pre><span></span><code><span id="__span-1-1">search/get -&gt; create draft -&gt; edit/upload/review -&gt; publish -&gt; version
+</span></code></pre></div>
+<p>Although the OpenAPI description separates these operations into tags such as
+<code>Records</code>, <code>Drafts</code>, <code>Drafts Files upload</code>, <code>Records Files</code>, and
+<code>Records Versions</code>, they form one user-facing lifecycle. That lifecycle is the
+main showcase and validation target for this client.</p>
+<h2 id="what-this-approach-provides">What this approach provides</h2>
+<p>The enhanced contract enables:</p>
+<ul>
+<li>discoverable Python request models;</li>
+<li>validation before a request is sent;</li>
+<li>parsed Pydantic responses where a concrete schema is linked;</li>
+<li>consistent synchronous and asynchronous functions;</li>
+<li>generated documentation and a browsable OpenAPI reference;</li>
+<li>tests that can detect drift across every generated endpoint.</li>
+</ul>
+<p>Schema reconstruction is still an interpretation of upstream documentation.
+When InvenioRDM changes, both the enhanced OpenAPI contract and the generated
+client should be regenerated and verified against the target server version.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../openapi/invenio.html" class="btn btn-neutral float-left" title="Enhanced OpenAPI"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright 2026 Terradue. Licensed under the Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/Terradue/invenio-rest-api-client/" class="fa fa-code-fork" style="color: #fcfcfc"> Terradue/invenio-rest-api-client</a>
+        </span>
+    
+    
+      <span><a href="../../openapi/invenio.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

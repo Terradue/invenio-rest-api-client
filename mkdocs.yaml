@@ -6,7 +6,7 @@ repo_url: https://github.com/Terradue/invenio-rest-api-client/
 repo_name: Terradue/invenio-rest-api-client
 
 theme:
-  name: material
+  name: readthedocs
   logo: imgs/icon-eoap.png
   features:
     - navigation.indexes

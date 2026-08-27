@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Fabrice Brito, Simone Tripodi" /><link rel="canonical" href="https://terradue.github.io/invenio-rest-api-client/reference/records/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Record APIs - Invenio REST API Client</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Record APIs";
+        var mkdocs_page_input_path = "reference/records.md";
+        var mkdocs_page_url = "/invenio-rest-api-client/reference/records/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../..">
+          <img src="../../imgs/icon-eoap.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/first-record/">Create your first record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">How-to guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/authenticate/">Authenticate</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/search-records/">Search and retrieve records</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/create-and-publish/">Create and publish a record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Record APIs</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#function-variants">Function variants</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#records">Records</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#drafts">Drafts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#draft-file-upload">Draft file upload</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#published-record-files">Published record files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#record-versions">Record versions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#common-types">Common types</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../client/">Client configuration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/invenio.html">Enhanced OpenAPI</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../invenio-v12.0.3-openapi-audit/">InvenioRDM v12.0.3 OpenAPI audit — Records/Drafts and Zenodo compatibility</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Explanation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../explanation/schema-reconstruction/">Why schemas were reconstructed</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Invenio REST API Client</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Reference</li>
+      <li class="breadcrumb-item active">Record APIs</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/Terradue/invenio-rest-api-client/edit/master/docs/reference/records.md">Edit on Terradue/invenio-rest-api-client</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="record-api-reference">Record API reference</h1>
+<p>The generated client maps each OpenAPI operation to a Python module. Record
+lifecycle operations are split across several OpenAPI tags, so their modules
+live in related packages.</p>
+<h2 id="function-variants">Function variants</h2>
+<p>Every generated endpoint exposes four functions:</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>I/O model</th>
+<th>Return value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sync</code></td>
+<td>blocking</td>
+<td>parsed model/data or <code>None</code></td>
+</tr>
+<tr>
+<td><code>sync_detailed</code></td>
+<td>blocking</td>
+<td><code>Response</code> with status, headers, content, and parsed data</td>
+</tr>
+<tr>
+<td><code>asyncio</code></td>
+<td>async</td>
+<td>parsed model/data or <code>None</code></td>
+</tr>
+<tr>
+<td><code>asyncio_detailed</code></td>
+<td>async</td>
+<td><code>Response</code> with status, headers, content, and parsed data</td>
+</tr>
+</tbody>
+</table>
+<p>When <code>raise_on_unexpected_status=True</code>, a status not declared by the OpenAPI
+operation raises <code>UnexpectedStatus</code>.</p>
+<h2 id="records">Records</h2>
+<p>Import from <code>invenio_rest_api_client.api.records</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_records</code></td>
+<td>Search published records</td>
+</tr>
+<tr>
+<td><code>get_a_record_by_id</code></td>
+<td>Retrieve one published record</td>
+</tr>
+<tr>
+<td><code>create_a_draft_record</code></td>
+<td>Begin a new record as a draft</td>
+</tr>
+<tr>
+<td><code>delete_record_community</code></td>
+<td>Remove a record from a community</td>
+</tr>
+<tr>
+<td><code>create_an_access_link</code></td>
+<td>Create a secret access link</td>
+</tr>
+<tr>
+<td><code>get_an_access_link_by_id</code></td>
+<td>Retrieve an access link</td>
+</tr>
+<tr>
+<td><code>list_access_links</code></td>
+<td>List a record's access links</td>
+</tr>
+<tr>
+<td><code>update_an_access_link</code></td>
+<td>Update an access link</td>
+</tr>
+<tr>
+<td><code>delete_an_access_link</code></td>
+<td>Delete an access link</td>
+</tr>
+</tbody>
+</table>
+<h2 id="drafts">Drafts</h2>
+<p>Import from <code>invenio_rest_api_client.api.drafts</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_a_draft_records</code></td>
+<td>Retrieve a draft</td>
+</tr>
+<tr>
+<td><code>update_a_draft_record</code></td>
+<td>Replace draft metadata/options</td>
+</tr>
+<tr>
+<td><code>deletediscard_a_draft_record</code></td>
+<td>Discard a draft</td>
+</tr>
+<tr>
+<td><code>publish_a_draft_record</code></td>
+<td>Publish a draft as a record</td>
+</tr>
+<tr>
+<td><code>edit_a_published_record_create_a_draft_record_from_a_published_record</code></td>
+<td>Create an editable draft from a published record</td>
+</tr>
+<tr>
+<td><code>reserve_a_doi</code></td>
+<td>Reserve a DOI</td>
+</tr>
+<tr>
+<td><code>delete_a_doi</code></td>
+<td>Remove a reserved DOI</td>
+</tr>
+<tr>
+<td><code>submit_a_record_for_review</code></td>
+<td>Submit a draft for review</td>
+</tr>
+<tr>
+<td><code>get_a_review_request</code></td>
+<td>Retrieve its review request</td>
+</tr>
+<tr>
+<td><code>createupdate_a_review_request</code></td>
+<td>Create or update its review request</td>
+</tr>
+<tr>
+<td><code>delete_a_review_request</code></td>
+<td>Delete its review request</td>
+</tr>
+<tr>
+<td><code>link_files_from_previous_version</code></td>
+<td>Link files from the previous version</td>
+</tr>
+</tbody>
+</table>
+<h2 id="draft-file-upload">Draft file upload</h2>
+<p>Import from <code>invenio_rest_api_client.api.drafts_files_upload</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>step_1_start_draft_file_uploads</code></td>
+<td>Initialize one or more file uploads</td>
+</tr>
+<tr>
+<td><code>step_2_upload_a_draft_files_content</code></td>
+<td>Upload raw file content</td>
+</tr>
+<tr>
+<td><code>step_3_complete_a_draft_file_upload</code></td>
+<td>Commit an uploaded file</td>
+</tr>
+</tbody>
+</table>
+<p>Draft file metadata and deletion operations are available under
+<code>invenio_rest_api_client.api.drafts</code>.</p>
+<h2 id="published-record-files">Published record files</h2>
+<p>Import from <code>invenio_rest_api_client.api.records_files</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list_a_records_files</code></td>
+<td>List files attached to a record</td>
+</tr>
+<tr>
+<td><code>get_a_record_files_metadata</code></td>
+<td>Retrieve metadata for one file</td>
+</tr>
+<tr>
+<td><code>download_a_record_file</code></td>
+<td>Download file content</td>
+</tr>
+</tbody>
+</table>
+<h2 id="record-versions">Record versions</h2>
+<p>Import from <code>invenio_rest_api_client.api.records_versions</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_all_versions</code></td>
+<td>List all versions</td>
+</tr>
+<tr>
+<td><code>get_latest_version</code></td>
+<td>Retrieve the latest version</td>
+</tr>
+<tr>
+<td><code>create_a_new_version</code></td>
+<td>Start a new draft version</td>
+</tr>
+</tbody>
+</table>
+<h2 id="common-types">Common types</h2>
+<p><code>invenio_rest_api_client.models</code> contains the generated Pydantic request and
+response models. Important Record models include:</p>
+<ul>
+<li><code>CreateADraftRecordBody</code>;</li>
+<li><code>UpdateDraftRecord</code>;</li>
+<li><code>Metadata</code>;</li>
+<li><code>Creator</code> and <code>PersonOrOrg</code>;</li>
+<li><code>Access</code> and <code>Files</code>;</li>
+<li><code>Created</code>.</li>
+</ul>
+<p><code>invenio_rest_api_client.types.Response[T]</code> contains:</p>
+<ul>
+<li><code>status_code</code>;</li>
+<li>raw <code>content</code>;</li>
+<li>response <code>headers</code>;</li>
+<li>optional <code>parsed</code> data.</li>
+</ul>
+<p>For the complete HTTP contract, use the
+<a href="../../openapi/invenio.html">enhanced OpenAPI reference</a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../how-to/create-and-publish/" class="btn btn-neutral float-left" title="Create and publish a record"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../client/" class="btn btn-neutral float-right" title="Client configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright 2026 Terradue. Licensed under the Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/Terradue/invenio-rest-api-client/" class="fa fa-code-fork" style="color: #fcfcfc"> Terradue/invenio-rest-api-client</a>
+        </span>
+    
+    
+      <span><a href="../../how-to/create-and-publish/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../client/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

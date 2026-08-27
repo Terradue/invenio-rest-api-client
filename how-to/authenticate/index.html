@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Fabrice Brito, Simone Tripodi" /><link rel="canonical" href="https://terradue.github.io/invenio-rest-api-client/how-to/authenticate/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Authenticate - Invenio REST API Client</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Authenticate";
+        var mkdocs_page_input_path = "how-to/authenticate.md";
+        var mkdocs_page_url = "/invenio-rest-api-client/how-to/authenticate/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../..">
+          <img src="../../imgs/icon-eoap.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/first-record/">Create your first record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">How-to guides</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Authenticate</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#provide-credentials-through-the-environment">Provide credentials through the environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-a-custom-authentication-header">Use a custom authentication header</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-a-private-certificate-authority">Use a private certificate authority</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reuse-and-close-connections">Reuse and close connections</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../search-records/">Search and retrieve records</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../create-and-publish/">Create and publish a record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/records/">Record APIs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/client/">Client configuration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/invenio.html">Enhanced OpenAPI</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/invenio-v12.0.3-openapi-audit/">InvenioRDM v12.0.3 OpenAPI audit — Records/Drafts and Zenodo compatibility</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Explanation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../explanation/schema-reconstruction/">Why schemas were reconstructed</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Invenio REST API Client</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">How-to guides</li>
+      <li class="breadcrumb-item active">Authenticate</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/Terradue/invenio-rest-api-client/edit/master/docs/how-to/authenticate.md">Edit on Terradue/invenio-rest-api-client</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="how-to-authenticate">How to authenticate</h1>
+<p>Use <code>AuthenticatedClient</code> for Record APIs that require an InvenioRDM Bearer
+token.</p>
+<h2 id="provide-credentials-through-the-environment">Provide credentials through the environment</h2>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><span class="go">export INVENIO_BASE_URL="https://invenio.example.org"</span>
+</span><span id="__span-0-2"><span class="go">export INVENIO_TOKEN="replace-with-your-token"</span>
+</span></code></pre></div>
+<div class="highlight"><pre><span></span><code><span id="__span-1-1"><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span id="__span-1-2">
+</span><span id="__span-1-3"><span class="kn">from</span><span class="w"> </span><span class="nn">invenio_rest_api_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticatedClient</span>
+</span><span id="__span-1-4">
+</span><span id="__span-1-5"><span class="n">client</span> <span class="o">=</span> <span class="n">AuthenticatedClient</span><span class="p">(</span>
+</span><span id="__span-1-6">    <span class="n">base_url</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"INVENIO_BASE_URL"</span><span class="p">],</span>
+</span><span id="__span-1-7">    <span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"INVENIO_TOKEN"</span><span class="p">],</span>
+</span><span id="__span-1-8">    <span class="n">raise_on_unexpected_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-1-9"><span class="p">)</span>
+</span></code></pre></div>
+<p>The client sends:</p>
+<div class="highlight"><pre><span></span><code><span id="__span-2-1"><span class="err">Authorization: Bearer replace-with-your-token</span>
+</span></code></pre></div>
+<p>Do not commit tokens to source control or include them in logs.</p>
+<h2 id="use-a-custom-authentication-header">Use a custom authentication header</h2>
+<p>If an API gateway expects another header or an unprefixed token:</p>
+<div class="highlight"><pre><span></span><code><span id="__span-3-1"><span class="n">client</span> <span class="o">=</span> <span class="n">AuthenticatedClient</span><span class="p">(</span>
+</span><span id="__span-3-2">    <span class="n">base_url</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"INVENIO_BASE_URL"</span><span class="p">],</span>
+</span><span id="__span-3-3">    <span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"INVENIO_TOKEN"</span><span class="p">],</span>
+</span><span id="__span-3-4">    <span class="n">prefix</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+</span><span id="__span-3-5">    <span class="n">auth_header_name</span><span class="o">=</span><span class="s2">"X-Api-Key"</span><span class="p">,</span>
+</span><span id="__span-3-6"><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="use-a-private-certificate-authority">Use a private certificate authority</h2>
+<p>Pass the path to a CA bundle:</p>
+<div class="highlight"><pre><span></span><code><span id="__span-4-1"><span class="n">client</span> <span class="o">=</span> <span class="n">AuthenticatedClient</span><span class="p">(</span>
+</span><span id="__span-4-2">    <span class="n">base_url</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"INVENIO_BASE_URL"</span><span class="p">],</span>
+</span><span id="__span-4-3">    <span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"INVENIO_TOKEN"</span><span class="p">],</span>
+</span><span id="__span-4-4">    <span class="n">verify_ssl</span><span class="o">=</span><span class="s2">"/path/to/ca-bundle.pem"</span><span class="p">,</span>
+</span><span id="__span-4-5"><span class="p">)</span>
+</span></code></pre></div>
+<p>Avoid <code>verify_ssl=False</code> outside disposable local development environments; it
+disables server identity verification.</p>
+<h2 id="reuse-and-close-connections">Reuse and close connections</h2>
+<p>Use the client as a context manager:</p>
+<div class="highlight"><pre><span></span><code><span id="__span-5-1"><span class="kn">from</span><span class="w"> </span><span class="nn">invenio_rest_api_client.api.records</span><span class="w"> </span><span class="kn">import</span> <span class="n">search_records</span>
+</span><span id="__span-5-2">
+</span><span id="__span-5-3"><span class="k">with</span> <span class="n">client</span><span class="p">:</span>
+</span><span id="__span-5-4">    <span class="n">result</span> <span class="o">=</span> <span class="n">search_records</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="s2">"climate"</span><span class="p">)</span>
+</span></code></pre></div>
+<p>For async code:</p>
+<div class="highlight"><pre><span></span><code><span id="__span-6-1"><span class="kn">from</span><span class="w"> </span><span class="nn">invenio_rest_api_client.api.records</span><span class="w"> </span><span class="kn">import</span> <span class="n">search_records</span>
+</span><span id="__span-6-2">
+</span><span id="__span-6-3"><span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">:</span>
+</span><span id="__span-6-4">    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">search_records</span><span class="o">.</span><span class="n">asyncio</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="s2">"climate"</span><span class="p">)</span>
+</span></code></pre></div>
+<p>See <a href="../../reference/client/">Client reference</a> for configuration options.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../tutorials/first-record/" class="btn btn-neutral float-left" title="Create your first record"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../search-records/" class="btn btn-neutral float-right" title="Search and retrieve records">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright 2026 Terradue. Licensed under the Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/Terradue/invenio-rest-api-client/" class="fa fa-code-fork" style="color: #fcfcfc"> Terradue/invenio-rest-api-client</a>
+        </span>
+    
+    
+      <span><a href="../../tutorials/first-record/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../search-records/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

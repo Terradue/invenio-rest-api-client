@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Fabrice Brito, Simone Tripodi" /><link rel="canonical" href="https://terradue.github.io/invenio-rest-api-client/reference/invenio-v12.0.3-openapi-audit/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>InvenioRDM v12.0.3 OpenAPI audit — Records/Drafts and Zenodo compatibility - Invenio REST API Client</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "InvenioRDM v12.0.3 OpenAPI audit \u2014 Records/Drafts and Zenodo compatibility";
+        var mkdocs_page_input_path = "reference/invenio-v12.0.3-openapi-audit.md";
+        var mkdocs_page_url = "/invenio-rest-api-client/reference/invenio-v12.0.3-openapi-audit/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../..">
+          <img src="../../imgs/icon-eoap.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/first-record/">Create your first record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">How-to guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/authenticate/">Authenticate</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/search-records/">Search and retrieve records</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/create-and-publish/">Create and publish a record</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../records/">Record APIs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../client/">Client configuration</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/invenio.html">Enhanced OpenAPI</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">InvenioRDM v12.0.3 OpenAPI audit — Records/Drafts and Zenodo compatibility</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#high-confidence-corrections-included-in-the-patch">High-confidence corrections included in the patch</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#important-issues-intentionally-not-guessed-in-this-patch">Important issues intentionally not guessed in this patch</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#searchlist-responses">Search/list responses</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#file-endpoints">File endpoints</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#exportcontent-media-types">Export/content media types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#controlled-vocabulary-enums">Controlled-vocabulary enums</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#missingunder-described-routes">Missing/under-described routes</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#recommended-source-of-truth-strategy">Recommended source-of-truth strategy</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Explanation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../explanation/schema-reconstruction/">Why schemas were reconstructed</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Invenio REST API Client</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Reference</li>
+      <li class="breadcrumb-item active">InvenioRDM v12.0.3 OpenAPI audit — Records/Drafts and Zenodo compatibility</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/Terradue/invenio-rest-api-client/edit/master/docs/reference/invenio-v12.0.3-openapi-audit.md">Edit on Terradue/invenio-rest-api-client</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="inveniordm-v1203-openapi-audit-recordsdrafts-and-zenodo-compatibility">InvenioRDM v12.0.3 OpenAPI audit — Records/Drafts and Zenodo compatibility</h1>
+<h2 id="scope">Scope</h2>
+<p>This audit compares <code>Terradue/invenio-rest-api-client</code> tag <code>v12.0.3</code> against:</p>
+<ul>
+<li>the current public <code>inveniosoftware/invenio-openapi</code> specification;</li>
+<li>the actual InvenioRDM v12.0.3 service/resource schemas (<code>invenio-rdm-records</code> plus its v5/v6 draft/record resource dependencies);</li>
+<li>Zenodo's current <code>zenodo-rdm</code> record serializer override.</li>
+</ul>
+<p>The supplied patch focuses on the Records/Drafts contract because that is where strict generated models currently fail. The remaining API groups still contain generic <code>Success</code>/<code>Created</code> response definitions and should be audited endpoint-by-endpoint before making them strongly typed.</p>
+<h2 id="high-confidence-corrections-included-in-the-patch">High-confidence corrections included in the patch</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Existing declaration</th>
+<th>Runtime/source behavior</th>
+<th>Patch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shared <code>Created</code> response</td>
+<td>Forced every <code>201</code> through a record-shaped <code>Created</code> model</td>
+<td><code>Created</code> is used by unrelated endpoints</td>
+<td>Restore generic response; add record-specific responses</td>
+</tr>
+<tr>
+<td><code>POST /api/records</code></td>
+<td><code>201 -&gt; Created</code></td>
+<td>Returns a record/draft item</td>
+<td><code>201 -&gt; RecordCreated -&gt; RecordResponse</code></td>
+</tr>
+<tr>
+<td>Zenodo <code>application/json</code></td>
+<td>Assumed canonical Invenio record</td>
+<td>Zenodo deliberately replaces the default record serializer with <code>ZenodoJSONSerializer</code></td>
+<td><code>RecordResponse = oneOf[RDMRecord, ZenodoRecord]</code></td>
+</tr>
+<tr>
+<td>Zenodo <code>id</code></td>
+<td>string</td>
+<td>integer</td>
+<td><code>ZenodoRecord.id: integer</code></td>
+</tr>
+<tr>
+<td>Zenodo <code>files</code></td>
+<td><code>Files</code> object</td>
+<td>array</td>
+<td><code>ZenodoRecord.files: array[ZenodoFile]</code></td>
+</tr>
+<tr>
+<td>Canonical files</td>
+<td>Only input options modeled</td>
+<td>v12 <code>FilesSchema</code> also emits <code>count</code>, <code>total_bytes</code>, <code>entries</code></td>
+<td>Add read-only output properties</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>typo <code>type": string</code>; no required fields</td>
+<td><code>identifier</code> and <code>provider</code> are required</td>
+<td>Fix typo and requirements</td>
+</tr>
+<tr>
+<td>Draft metadata</td>
+<td>Full publish-time required fields</td>
+<td>drafts are saved with validation errors (<code>raise_errors=False</code>)</td>
+<td>Remove <code>Metadata.required</code> for draft/general representation</td>
+</tr>
+<tr>
+<td><code>publisher</code></td>
+<td>required</td>
+<td>optional in v12 <code>MetadataSchema</code></td>
+<td>no longer required</td>
+</tr>
+<tr>
+<td>publication/date fields</td>
+<td><code>format: date</code></td>
+<td>EDTF strings, including intervals/partial dates</td>
+<td>remove <code>format: date</code></td>
+</tr>
+<tr>
+<td>contributors</td>
+<td>reused <code>Creator</code>, role optional</td>
+<td>contributor role required</td>
+<td>add <code>Contributor</code> schema</td>
+</tr>
+<tr>
+<td>locations</td>
+<td>array of container objects</td>
+<td>object containing <code>features</code> array</td>
+<td>reference the existing location container directly</td>
+</tr>
+<tr>
+<td>rights</td>
+<td><code>links</code> URI</td>
+<td>v12 has <code>props</code>, singular <code>link</code>, and dump-only <code>icon</code></td>
+<td>correct properties</td>
+</tr>
+<tr>
+<td>vocabulary relation labels</td>
+<td><code>title</code> required</td>
+<td>relation input needs ID; display title is output enrichment</td>
+<td>make title read-only/non-required</td>
+</tr>
+<tr>
+<td>draft update example</td>
+<td><code>enabled: "false"</code></td>
+<td>boolean</td>
+<td><code>enabled: false</code></td>
+</tr>
+<tr>
+<td>publish status</td>
+<td><code>201</code></td>
+<td>v5 draft resource returns <code>202</code></td>
+<td><code>202 -&gt; RecordAccepted</code></td>
+</tr>
+<tr>
+<td>delete draft status</td>
+<td><code>200</code></td>
+<td>v5 draft resource returns <code>204</code></td>
+<td><code>204 -&gt; NoContent</code></td>
+</tr>
+<tr>
+<td>latest-version endpoint</td>
+<td><code>200</code></td>
+<td>raises redirect with HTTP <code>301</code> + <code>Location</code></td>
+<td>model <code>301</code> redirect</td>
+</tr>
+</tbody>
+</table>
+<h2 id="important-issues-intentionally-not-guessed-in-this-patch">Important issues intentionally not guessed in this patch</h2>
+<h3 id="searchlist-responses">Search/list responses</h3>
+<p><code>GET /api/records</code>, <code>GET /api/user/records</code>, and versions searches still use the generic <code>Success</code> response. Runtime responses are search-result envelopes and should get dedicated list/search schemas rather than being inferred from a single payload.</p>
+<h3 id="file-endpoints">File endpoints</h3>
+<p>File initialization, commit, metadata, and content endpoints use response shapes distinct from records. The old global record-shaped <code>Created</code> was especially dangerous here. The patch restores generic handling but does not invent detailed file-operation responses without tracing each resource method.</p>
+<h3 id="exportcontent-media-types">Export/content media types</h3>
+<p>Several export and content-download endpoints still reuse a JSON <code>Success</code> response even when the real payload is XML, BibTeX, binary content, etc. These should be corrected with operation-specific <code>content</code> media types.</p>
+<h3 id="controlled-vocabulary-enums">Controlled-vocabulary enums</h3>
+<p>The hand-written specification turns multiple configurable vocabulary IDs into Python enums (resource type, roles, identifier schemes, relation types, etc.). This is convenient for a stock instance but too strict for a generic InvenioRDM client because several vocabularies/schemes are deployment-configurable. A second hardening pass should replace configurable enums with strings plus examples/descriptions, while keeping genuinely fixed enums such as person/organization type and access protection values.</p>
+<h3 id="missingunder-described-routes">Missing/under-described routes</h3>
+<p>The runtime record resource exposes more route semantics than the manual public specification captures. A complete API-wide contract should be generated from configured runtime resources where possible rather than continuing to treat the public manual YAML as authoritative.</p>
+<h2 id="recommended-source-of-truth-strategy">Recommended source-of-truth strategy</h2>
+<ol>
+<li>Use the public <code>inveniosoftware/invenio-openapi</code> only as a route/documentation baseline.</li>
+<li>Ground strongly typed schemas and status codes in the tagged implementation corresponding to the intended InvenioRDM version.</li>
+<li>Treat Zenodo as a deployment profile: it intentionally changes the JSON record representation.</li>
+<li>Keep operation-specific response components (<code>RecordCreated</code>, <code>RecordSuccess</code>, etc.) rather than a universal typed <code>Created</code>/<code>Success</code>.</li>
+<li>Add captured runtime payloads as regression tests before regenerating the Python client.</li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../openapi/invenio.html" class="btn btn-neutral float-left" title="Enhanced OpenAPI"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../explanation/schema-reconstruction/" class="btn btn-neutral float-right" title="Why schemas were reconstructed">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright 2026 Terradue. Licensed under the Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/Terradue/invenio-rest-api-client/" class="fa fa-code-fork" style="color: #fcfcfc"> Terradue/invenio-rest-api-client</a>
+        </span>
+    
+    
+      <span><a href="../../openapi/invenio.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../explanation/schema-reconstruction/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

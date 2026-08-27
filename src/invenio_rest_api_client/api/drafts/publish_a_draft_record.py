@@ -23,7 +23,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models import Created
+from ...models import RDMRecord, RecordResponse, ZenodoRecord
 from ...types import Response
 
 
@@ -43,11 +43,11 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | Created | None:
-    if response.status_code == 201:
-        response_201 = Created.model_validate(response.json())
+) -> Any | RDMRecord | ZenodoRecord | None:
+    if response.status_code == 202:
+        response_202 = RecordResponse.model_validate(response.json()).root
 
-        return response_201
+        return response_202
 
     if response.status_code == 400:
         response_400 = cast("Any", None)
@@ -76,7 +76,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[Any | Created]:
+) -> Response[Any | RDMRecord | ZenodoRecord]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -89,7 +89,7 @@ def sync_detailed(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Any | Created]:
+) -> Response[Any | RDMRecord | ZenodoRecord]:
     """Publish a draft record
 
     Args:
@@ -100,7 +100,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | Created]
+        Response[Any | RDMRecord | ZenodoRecord]
     """
 
     kwargs = _get_kwargs(
@@ -118,7 +118,7 @@ def sync(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Any | Created | None:
+) -> Any | RDMRecord | ZenodoRecord | None:
     """Publish a draft record
 
     Args:
@@ -129,7 +129,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | Created
+        Any | RDMRecord | ZenodoRecord
     """
 
     return sync_detailed(
@@ -142,7 +142,7 @@ async def asyncio_detailed(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Any | Created]:
+) -> Response[Any | RDMRecord | ZenodoRecord]:
     """Publish a draft record
 
     Args:
@@ -153,7 +153,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | Created]
+        Response[Any | RDMRecord | ZenodoRecord]
     """
 
     kwargs = _get_kwargs(
@@ -169,7 +169,7 @@ async def asyncio(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Any | Created | None:
+) -> Any | RDMRecord | ZenodoRecord | None:
     """Publish a draft record
 
     Args:
@@ -180,7 +180,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | Created
+        Any | RDMRecord | ZenodoRecord
     """
 
     return (

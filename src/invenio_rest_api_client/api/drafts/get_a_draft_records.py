@@ -23,6 +23,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models import RDMRecord, RecordResponse, ZenodoRecord
 from ...types import Response
 
 
@@ -42,9 +43,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | dict[str, Any] | None:
+) -> Any | RDMRecord | ZenodoRecord | None:
     if response.status_code == 200:
-        response_200 = response.json()
+        response_200 = RecordResponse.model_validate(response.json()).root
 
         return response_200
 
@@ -75,7 +76,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[Any | dict[str, Any]]:
+) -> Response[Any | RDMRecord | ZenodoRecord]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -88,7 +89,7 @@ def sync_detailed(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Any | dict[str, Any]]:
+) -> Response[Any | RDMRecord | ZenodoRecord]:
     """Get a draft records
 
     Args:
@@ -99,7 +100,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | dict[str, Any]]
+        Response[Any | RDMRecord | ZenodoRecord]
     """
 
     kwargs = _get_kwargs(
@@ -117,7 +118,7 @@ def sync(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Any | dict[str, Any] | None:
+) -> Any | RDMRecord | ZenodoRecord | None:
     """Get a draft records
 
     Args:
@@ -128,7 +129,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | dict[str, Any]
+        Any | RDMRecord | ZenodoRecord
     """
 
     return sync_detailed(
@@ -141,7 +142,7 @@ async def asyncio_detailed(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Any | dict[str, Any]]:
+) -> Response[Any | RDMRecord | ZenodoRecord]:
     """Get a draft records
 
     Args:
@@ -152,7 +153,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | dict[str, Any]]
+        Response[Any | RDMRecord | ZenodoRecord]
     """
 
     kwargs = _get_kwargs(
@@ -168,7 +169,7 @@ async def asyncio(
     draft_id: str,
     *,
     client: AuthenticatedClient,
-) -> Any | dict[str, Any] | None:
+) -> Any | RDMRecord | ZenodoRecord | None:
     """Get a draft records
 
     Args:
@@ -179,7 +180,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | dict[str, Any]
+        Any | RDMRecord | ZenodoRecord
     """
 
     return (

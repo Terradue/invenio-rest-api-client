@@ -23,7 +23,6 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models import Created
 from ...types import Response
 
 
@@ -51,9 +50,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | Created | None:
+) -> Any | dict[str, Any] | None:
     if response.status_code == 201:
-        response_201 = Created.model_validate(response.json())
+        response_201 = response.json()
 
         return response_201
 
@@ -84,7 +83,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[Any | Created]:
+) -> Response[Any | dict[str, Any]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -98,7 +97,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: dict[str, Any],
-) -> Response[Any | Created]:
+) -> Response[Any | dict[str, Any]]:
     """Submit a comment on a request
 
     Args:
@@ -110,7 +109,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | Created]
+        Response[Any | dict[str, Any]]
     """
 
     kwargs = _get_kwargs(
@@ -130,7 +129,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: dict[str, Any],
-) -> Any | Created | None:
+) -> Any | dict[str, Any] | None:
     """Submit a comment on a request
 
     Args:
@@ -142,7 +141,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | Created
+        Any | dict[str, Any]
     """
 
     return sync_detailed(
@@ -157,7 +156,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: dict[str, Any],
-) -> Response[Any | Created]:
+) -> Response[Any | dict[str, Any]]:
     """Submit a comment on a request
 
     Args:
@@ -169,7 +168,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | Created]
+        Response[Any | dict[str, Any]]
     """
 
     kwargs = _get_kwargs(
@@ -187,7 +186,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: dict[str, Any],
-) -> Any | Created | None:
+) -> Any | dict[str, Any] | None:
     """Submit a comment on a request
 
     Args:
@@ -199,7 +198,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | Created
+        Any | dict[str, Any]
     """
 
     return (

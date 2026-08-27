@@ -31,6 +31,10 @@ tasks:
 
   default:
     cmds:
+    - task: quality:pre-commit:run
+
+  generate_client:
+    cmds:
     - task: openapi:bundle
       vars:
         API: ./docs/openapi/invenio.yaml

@@ -1195,7 +1195,7 @@ paths:
         "500":
           $ref: '#/components/responses/InternalServerError'
         "201":
-          $ref: '#/components/responses/Created'
+          $ref: '#/components/responses/RecordCreated'
       requestBody:
         required: true
         content:
@@ -1478,8 +1478,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         "500":
           $ref: '#/components/responses/InternalServerError'
-        "201":
-          $ref: '#/components/responses/Created'
+        "202":
+          $ref: '#/components/responses/RecordAccepted'
       security:
         - BearerAuth: []
   /api/records/{draftId}/draft/actions/files-import:
@@ -1535,7 +1535,7 @@ paths:
         "500":
           $ref: '#/components/responses/InternalServerError'
         "201":
-          $ref: '#/components/responses/Created'
+          $ref: '#/components/responses/RecordCreated'
       security:
         - BearerAuth: []
     delete:
@@ -1551,8 +1551,8 @@ paths:
             type: string
           description: Unique identifier for the draft record
       responses:
-        "200":
-          $ref: '#/components/responses/Success'
+        "204":
+          $ref: '#/components/responses/NoContent'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1579,7 +1579,7 @@ paths:
           description: Unique identifier for the draft record
       responses:
         "200":
-          $ref: '#/components/responses/Success'
+          $ref: '#/components/responses/RecordSuccess'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1601,7 +1601,7 @@ paths:
                 record: public
                 files: public
               files:
-                enabled: "false"
+                enabled: false
               metadata:
                 creators:
                   - person_or_org:
@@ -1644,7 +1644,7 @@ paths:
           description: Unique identifier for the draft record
       responses:
         "200":
-          $ref: '#/components/responses/Success'
+          $ref: '#/components/responses/RecordSuccess'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1940,7 +1940,7 @@ paths:
           description: Unique identifier for the record
       responses:
         "200":
-          $ref: '#/components/responses/Success'
+          $ref: '#/components/responses/RecordSuccess'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2072,7 +2072,7 @@ paths:
         "500":
           $ref: '#/components/responses/InternalServerError'
         "201":
-          $ref: '#/components/responses/Created'
+          $ref: '#/components/responses/RecordCreated'
       security:
         - BearerAuth: []
     get:
@@ -2116,8 +2116,18 @@ paths:
             type: string
           description: Unique identifier for the record
       responses:
-        "200":
-          $ref: '#/components/responses/Success'
+        "301":
+          description: Redirect to the latest record version
+          headers:
+            Location:
+              description: URL of the latest record version
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Redirect'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -3884,7 +3894,26 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Created'
+            type: object
+            additionalProperties: true
+    RecordCreated:
+      description: Record or draft created successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RecordResponse'
+    RecordSuccess:
+      description: Record retrieved or updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RecordResponse'
+    RecordAccepted:
+      description: Record publication accepted successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RecordResponse'
     NoContent:
       description: No content - Operation completed successfully
   schemas:
@@ -3916,7 +3945,6 @@ components:
 
     PIDs:
       type: object
-      uniqueItems: true
       additionalProperties:
         $ref: '#/components/schemas/PID'
 
@@ -3924,10 +3952,13 @@ components:
       type: object
       description: An external persistent identifier object.
       additionalProperties: false
+      required:
+      - identifier
+      - provider
       properties:
         identifier:
           description: An identifier.
-          type": string
+          type: string
         provider:
           description: The provider of the persistent identifier.
           type: string
@@ -3935,31 +3966,71 @@ components:
           description: Client identifier for the specific PID.
           type: string
 
-    Created:
+    Redirect:
       type: object
+      required:
+      - status
+      - message
+      - location
+      properties:
+        status:
+          type: integer
+          const: 301
+        message:
+          type: string
+        location:
+          type: string
+          format: uri
+
+    RecordResponse:
+      description: |
+        Record representation returned by an InvenioRDM instance.
+
+        Vanilla InvenioRDM serializes records using RDMRecordSchema. Zenodo
+        intentionally overrides the application/json record serializer with
+        its Zenodo v1 compatibility representation, so both representations
+        are valid responses from an InvenioRDM-compatible deployment.
+      oneOf:
+      - $ref: '#/components/schemas/RDMRecord'
+      - $ref: '#/components/schemas/ZenodoRecord'
+
+    RDMRecord:
+      type: object
+      additionalProperties: true
+      required:
+      - id
       properties:
         access:
           $ref: '#/components/schemas/Access'
         created:
           type: string
           format: date-time
+          readOnly: true
         expires_at:
           type: string
           format: date-time
+          readOnly: true
         files:
+          $ref: '#/components/schemas/Files'
+        media_files:
           $ref: '#/components/schemas/Files'
         id:
           type: string
         is_published:
           type: boolean
+          readOnly: true
+        is_draft:
+          type: boolean
+          readOnly: true
         links:
           type: object
           additionalProperties:
             type: string
             format: uri
         metadata:
-          type: object
-          additionalProperties: true
+          $ref: '#/components/schemas/Metadata'
+        custom_fields:
+          $ref: '#/components/schemas/CustomFields'
         parent:
           type: object
           additionalProperties: true
@@ -3968,11 +4039,122 @@ components:
         revision_id:
           type: integer
           format: int32
+          readOnly: true
+        revision:
+          type: integer
+          format: int32
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
         updated:
           type: string
           format: date-time
+          readOnly: true
         versions:
           $ref: '#/components/schemas/Version'
+          readOnly: true
+
+    ZenodoRecord:
+      description: |
+        Zenodo application/json representation for records and drafts. Zenodo
+        overrides InvenioRDM's default record serializer with its Zenodo v1
+        compatibility serializer; notably, id is numeric and files is an array.
+      type: object
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+        id:
+          type: integer
+          format: int64
+        conceptrecid:
+          type: string
+        recid:
+          type: string
+        revision:
+          type: integer
+        doi:
+          type: string
+        conceptdoi:
+          type: string
+        doi_url:
+          type: string
+          format: uri
+        metadata:
+          type: object
+          additionalProperties: true
+        title:
+          type: string
+        links:
+          type: object
+          additionalProperties:
+            type: string
+            format: uri
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZenodoFile'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZenodoOwner'
+        status:
+          type: string
+          enum:
+          - draft
+          - published
+        state:
+          type: string
+          enum:
+          - unsubmitted
+          - done
+          - inprogress
+        submitted:
+          type: boolean
+        stats:
+          type: object
+          additionalProperties: true
+        swh:
+          type: object
+          additionalProperties: true
+
+    ZenodoFile:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        size:
+          type: integer
+          format: int64
+        checksum:
+          type: string
+        links:
+          type: object
+          additionalProperties:
+            type: string
+            format: uri
+
+    ZenodoOwner:
+      type: object
+      additionalProperties: true
+      required:
+      - id
+      properties:
+        id:
+          type: string
 
     FileTransferType:
       description: The actual technology that is used to store a file
@@ -4072,6 +4254,9 @@ components:
           $ref: '#/components/schemas/AccessFiles'
         embargo:
           $ref: '#/components/schemas/Embargo'
+        status:
+          description: Access status.
+          type: string
 
     Files:
       description: |
@@ -4091,6 +4276,50 @@ components:
           type: array
           items:
             type: string
+        count:
+          description: Number of files.
+          type: integer
+          readOnly: true
+        total_bytes:
+          description: Total size of all files in bytes.
+          type: integer
+          format: int64
+          readOnly: true
+        entries:
+          description: Files keyed by filename.
+          type: object
+          readOnly: true
+          additionalProperties:
+            $ref: '#/components/schemas/File'
+
+    File:
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        checksum:
+          type: string
+        ext:
+          type: string
+        size:
+          type: integer
+          format: int64
+        mimetype:
+          type: string
+        storage_class:
+          type: string
+        key:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+        access:
+          type: object
+          additionalProperties: true
+        processor:
+          type: object
+          additionalProperties: true
 
     ResourceTypeId:
       description: The resource type id from the controlled vocabulary.
@@ -4276,6 +4505,21 @@ components:
           items:
             $ref: '#/components/schemas/Affiliation'
 
+    Contributor:
+      type: object
+      required:
+      - person_or_org
+      - role
+      properties:
+        person_or_org:
+          $ref: '#/components/schemas/PersonOrOrg'
+        role:
+          $ref: '#/components/schemas/Role'
+        affiliations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Affiliation'
+
     AdditionalTitleTypeId:
       description: Title type id from the controlled vocabulary.
       type: string
@@ -4290,7 +4534,6 @@ components:
       type: object
       required:
       - id
-      - title
       properties:
         id:
           $ref: '#/components/schemas/AdditionalTitleTypeId'
@@ -4298,6 +4541,7 @@ components:
           description: The corresponding localized human readable label
           type: object
           additionalProperties: true
+          readOnly: true
 
     Lang:
       description: The language of the associated item.
@@ -4340,7 +4584,6 @@ components:
       type: object
       required:
       - id
-      - title
       properties:
         id:
           $ref: '#/components/schemas/AdditionalDescriptionTypeId'
@@ -4348,6 +4591,7 @@ components:
           description: The corresponding localized human readable label.
           type: object
           additionalProperties: true
+          readOnly: true
 
     AdditionalDescription:
       description: Additional description in addition to the primary description (e.g. abstracts in other languages), methods or further notes.
@@ -4379,8 +4623,15 @@ components:
           description: Localized license description text
           type: object
           additionalProperties: true
-        links:
-          description: Link to full license.
+        icon:
+          description: License icon.
+          type: string
+          readOnly: true
+        props:
+          type: object
+          additionalProperties: true
+        link:
+          description: Link to the full license.
           type: string
           format: uri
 
@@ -4416,7 +4667,6 @@ components:
       type: object
       required:
       - id
-      - title
       properties:
         id:
           $ref: '#/components/schemas/DateTypeId'
@@ -4424,6 +4674,7 @@ components:
           description: The corresponding localized human readable label
           type: object
           additionalProperties: true
+          readOnly: true
 
     Date:
       description: Date relevant to the resource.
@@ -4435,7 +4686,6 @@ components:
         date:
           description: A date or time interval according to Extended Date Time Format Level 0.
           type: string
-          format: date
         type:
           $ref: '#/components/schemas/DateType'
         description:
@@ -4526,7 +4776,6 @@ components:
       type: object
       required:
       - id
-      - title
       properties:
         id:
           $ref: '#/components/schemas/RelationTypeId'
@@ -4534,6 +4783,7 @@ components:
           description: The corresponding localized human readable label
           type: object
           additionalProperties: true
+          readOnly: true
 
     RelatedIdentifierResourceTypeId:
       description: Date type id from the controlled vocabulary.
@@ -4590,7 +4840,6 @@ components:
       type: object
       required:
       - id
-      - title
       properties:
         id:
           $ref: '#/components/schemas/RelatedIdentifierResourceTypeId'
@@ -4598,6 +4847,7 @@ components:
           description: The corresponding localized human readable label
           type: object
           additionalProperties: true
+          readOnly: true
 
     RelatedIdentifier:
       description: Identifier of related resources.
@@ -4738,12 +4988,6 @@ components:
 
         More informations can be found on InvenioRDM Official page: https://inveniordm.docs.cern.ch/reference/metadata/#metadata
       type: object
-      required:
-      - resource_type
-      - title
-      - publication_date
-      - creators
-      - publisher
       properties:
         resource_type:
           $ref: '#/components/schemas/ResourceType'
@@ -4753,7 +4997,6 @@ components:
         publication_date:
           description: The date when the resource was or will be made publicly available.
           type: string
-          format: date
         creators:
           description: The creators field registers those persons or organisations that should be credited for the resource described by the record.
           type: array
@@ -4785,7 +5028,7 @@ components:
           description: The organisations or persons responsible for collecting, managing, distributing, or otherwise contributing to the development of the resource.
           type: array
           items:
-            $ref: '#/components/schemas/Creator'
+            $ref: '#/components/schemas/Contributor'
         subjects:
           description: Subject, keyword, classification code, or key phrase describing the resource.
           type: array
@@ -4829,9 +5072,7 @@ components:
             type: string
         locations:
           description: Spatial region or named place where the data was gathered or about which the data is focused.
-          type: array
-          items:
-            $ref: '#/components/schemas/Location'
+          $ref: '#/components/schemas/Location'
         funding:
           description: Information about financial support (funding) for the resource being registered.
           type: array

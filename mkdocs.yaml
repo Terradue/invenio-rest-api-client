@@ -52,6 +52,7 @@ nav:
       - Record APIs: reference/records.md
       - Client configuration: reference/client.md
       - Enhanced OpenAPI: openapi/invenio.html
+      - ./reference/invenio-v12.0.3-openapi-audit.md
   - Explanation:
       - Why schemas were reconstructed: explanation/schema-reconstruction.md
 

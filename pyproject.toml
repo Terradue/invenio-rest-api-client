@@ -31,7 +31,7 @@ dependencies = [
   "attrs>=26.1.0",
   "pydantic==2.13.4",
   "python-dateutil>=2.9.0.post0",
-  "loguru==0.7.3"
+  "loguru==0.8.0"
 ]
 
 [tool.hatch.metadata]
